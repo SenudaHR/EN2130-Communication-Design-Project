@@ -26,9 +26,7 @@ It is built in **GNU Radio Companion (GRC)** with custom embedded Python blocks,
   - Compatible with BladeRF SDRs
   - Adjustable RF/IF/TX gains via GUI
 
----
 
-## 📂 Project Structure
 
 ---
 
