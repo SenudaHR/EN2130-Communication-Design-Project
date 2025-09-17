@@ -29,12 +29,6 @@ It is built in **GNU Radio Companion (GRC)** with custom embedded Python blocks,
 ---
 
 ## 📂 Project Structure
-Got it 🚀 — here’s a clean README.md draft for your GNU Radio QPSK + ARQ project that you can directly put on GitHub. I’ll make it structured, professional, and beginner-friendly.
-
-
----
-
-├── cdp.py              # Main auto-generated Python flowgraph ├── epy_block_0.py      # Address adder (adds destination address to frames) ├── epy_block_2.py      # File-to-PDU source with ARQ support ├── epy_block_3_0.py    # Address checker + ACK generator ├── ab.txt              # Example input text file └── README.md           # Project documentation
 
 ---
 
