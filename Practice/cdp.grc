@@ -45,71 +45,6 @@ blocks:
     coordinate: [2640, 84.0]
     rotation: 0
     state: enabled
-- name: cc_dec
-  id: variable_cc_decoder_def
-  parameters:
-    comment: ''
-    dim1: '1'
-    dim2: '4'
-    framebits: MTU*8
-    k: k
-    mode: fec.CC_TAILBITING
-    ndim: '1'
-    padding: 'True'
-    polys: polys
-    rate: '2'
-    state_end: '-1'
-    state_start: '0'
-    value: '"ok"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2920, 528.0]
-    rotation: 0
-    state: enabled
-- name: cc_enc
-  id: variable_cc_encoder_def
-  parameters:
-    comment: ''
-    dim1: '1'
-    dim2: '1'
-    framebits: MTU*8
-    k: k
-    mode: fec.CC_TAILBITING
-    ndim: '0'
-    padding: 'True'
-    polys: polys
-    rate: '2'
-    state_start: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2648, 596.0]
-    rotation: 0
-    state: enabled
-- name: delay
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: 1,0,1,1
-    label: Delay
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '1'
-    stop: '200'
-    value: '42'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [3176, 8.0]
-    rotation: 0
-    state: enabled
 - name: eq_gain
   id: variable_qtgui_range
   parameters:
@@ -141,27 +76,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [2464, 28.0]
-    rotation: 0
-    state: enabled
-- name: freq
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: ''
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: 2e9
-    step: 100e3
-    stop: 6e9
-    value: 2.4e9
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [3448, 216.0]
     rotation: 0
     state: enabled
 - name: freq_offset
@@ -196,28 +110,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2544, 364.0]
-    rotation: 0
-    state: enabled
-- name: if_gain
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: IF gain
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '1'
-    stop: '50'
-    value: '40'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [3416, 8.0]
+    coordinate: [2664, 420.0]
     rotation: 0
     state: enabled
 - name: k
@@ -262,7 +155,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3024, 8.0]
+    coordinate: [3016, 0.0]
     rotation: 0
     state: enabled
 - name: phase_bw
@@ -283,7 +176,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3160, 288.0]
+    coordinate: [3032, 488.0]
     rotation: 0
     state: enabled
 - name: polys
@@ -315,28 +208,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3120, 660.0]
-    rotation: 0
-    state: enabled
-- name: rf_gain
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: RF gain
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '1'
-    stop: '60'
-    value: '60'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [3344, 256.0]
+    coordinate: [3216, 660.0]
     rotation: 0
     state: enabled
 - name: rf_gain_0
@@ -360,27 +232,6 @@ blocks:
     coordinate: [3592, 448.0]
     rotation: 0
     state: enabled
-- name: rf_gain_sink
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: RF gain sink
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '1'
-    stop: '60'
-    value: '10'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [3216, 136.0]
-    rotation: 0
-    state: enabled
 - name: rrc_taps
   id: variable
   parameters:
@@ -393,30 +244,6 @@ blocks:
     coordinate: [2832, 4.0]
     rotation: 0
     state: enabled
-- name: rx_freq_
-  id: variable
-  parameters:
-    comment: Set rx frequency
-    value: 433e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2872, 92.0]
-    rotation: 0
-    state: enabled
-- name: rxbw
-  id: variable
-  parameters:
-    comment: ''
-    value: '10000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2720, 268.0]
-    rotation: 0
-    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -426,7 +253,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2704, 164.0]
+    coordinate: [2712, 172.0]
     rotation: 0
     state: enabled
 - name: samp_rate_blade
@@ -462,19 +289,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2760, 116.0]
-    rotation: 0
-    state: enabled
-- name: taps
-  id: variable
-  parameters:
-    comment: ''
-    value: '[1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2808, 332.0]
+    coordinate: [2824, 84.0]
     rotation: 0
     state: enabled
 - name: time_offset
@@ -516,19 +331,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3280, 0.0]
-    rotation: 0
-    state: enabled
-- name: tx_freq
-  id: variable
-  parameters:
-    comment: Set tx frequency
-    value: 600e6
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2824, 228.0]
+    coordinate: [3200, 8.0]
     rotation: 0
     state: enabled
 - name: txbw
@@ -541,27 +344,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [2512, 204.0]
-    rotation: 0
-    state: enabled
-- name: txgain
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: ''
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '18'
-    step: '1'
-    stop: '60'
-    value: '50'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [2640, 500.0]
     rotation: 0
     state: enabled
 - name: variable_adaptive_algorithm_0
@@ -855,7 +637,7 @@ blocks:
     minoutbuf: '0'
     noise_voltage: noise_volt
     seed: '0'
-    taps: taps
+    taps: '3'
   states:
     bus_sink: false
     bus_source: false
@@ -1486,7 +1268,7 @@ blocks:
   states:
     _io_cache: '(''GUI Text to PDU with Go-Back-N ARQ'', ''pdu_text_gui'', [(''wait_time'',
       ''2.0''), (''pkt_size'', ''32''), (''address'', ''1''), (''retry_limit'', ''100''),
-      (''window_size'', ''4'')], [(''in'', ''message'', 1), (''ack_in'', ''message'',
+      (''window_size'', ''4'')], [(''ack_in'', ''message'', 1), (''in'', ''message'',
       1)], [(''out'', ''message'', 1)], ''\n    Custom block: QT GUI Message Entry
       -> PDU sender with Go-Back-N ARQ.\n    - Splits text into packets (2 bytes:
       [address, seq_id] + payload)\n    - Sends packets in a sliding window\n    -
@@ -2503,7 +2285,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '10000'
-    center_freq: freq/2
+    center_freq: 1.2e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
@@ -2523,7 +2305,7 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '10000'
-    center_freq: freq/2
+    center_freq: 1.2e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
@@ -2542,8 +2324,8 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    bandwidth: rxbw
-    center_freq: freq
+    bandwidth: '10000'
+    center_freq: 2.4e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
@@ -2564,8 +2346,8 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    bandwidth: rxbw
-    center_freq: freq/2
+    bandwidth: '10000'
+    center_freq: 1.2e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
