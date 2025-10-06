@@ -1,0 +1,36 @@
+\frametitle{How ARQ Mechanism Visible in GNU Radio?}
+
+		\tiny
+		\begin{verbatim}
+			
+
+	[CRC32] OK (Packet 20)
+	[Forward] Packet 20 duplicate, not forwarded
+	[FilePDU] Timeout waiting for ACK of 0x15, retrying...
+	[FilePDU] Packet 0x15 sent (try 2)
+	[CRC32] OK (Packet 21)
+	[Forward] UTF-8 decode error: 'charmap' codec can't encode character '\u2192' in
+	position 20: character maps to <undefined>
+	[TextFile] Wrote 31 chars to D:\University\Semester 3\EN2130\gnupractice\rx.txt
+	[FilePDU] Timeout waiting for ACK of 0x15, retrying...
+	[FilePDU] Packet 0x15 sent (try 3)
+	[CRC32] OK (Packet 21)
+	[Forward] Packet 21 duplicate, not forwarded
+	[FilePDU] ACK received for packet 0x15
+	[FilePDU] Packet 0x16 sent (try 1)
+	[CRC32] OK (Packet 21)
+	[Forward] Packet 21 duplicate, not forwarded
+	[FilePDU] Timeout waiting for ACK of 0x16, retrying...
+	[FilePDU] Packet 0x16 sent (try 2)
+	[CRC32] OK (Packet 22)
+	[Forward] UTF-8 decode error: 'charmap' codec can't encode character '\u2192' in
+	position 20: character maps to <undefined>
+	[TextFile] Wrote 7 chars to D:\University\Semester 3\EN2130\gnupractice\rx.txt
+	[FilePDU] Timeout waiting for ACK of 0x16, retrying...
+	[FilePDU] Packet 0x16 sent (try 3)
+	[CRC32] OK (Packet 22)
+	[Forward] Packet 22 duplicate, not forwarded
+	[FilePDU] ACK received for packet 0x16
+		\end{verbatim}
+	
+		
