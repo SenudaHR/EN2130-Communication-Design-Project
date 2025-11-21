@@ -428,9 +428,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792.0, 408]
+    coordinate: [840.0, 384]
     rotation: 90
-    state: disabled
+    state: enabled
 - name: blocks_multiply_const_vxx_0_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -547,7 +547,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 540.0]
+    coordinate: [640, 536.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0_0
@@ -623,7 +623,7 @@ blocks:
     bus_structure: null
     coordinate: [1208, 496.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: channels_channel_model_0_0
   id: channels_channel_model
   parameters:
@@ -732,7 +732,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 516.0]
+    coordinate: [344, 520.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -767,7 +767,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     tagname: '"packet_len"'
-    threshold: '2'
+    threshold: '5'
     type: byte
   states:
     bus_sink: false
@@ -810,7 +810,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1944, 616.0]
+    coordinate: [2008, 576.0]
     rotation: 0
     state: enabled
 - name: digital_costas_loop_cc_0_0
@@ -851,7 +851,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 24.0]
+    coordinate: [424, 72.0]
     rotation: 0
     state: enabled
 - name: digital_diff_decoder_bb_0
@@ -898,7 +898,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_taps: '32'
+    num_taps: '15'
     sps: '4'
     training_sequence: '[ ]'
     training_start_tag: corr_est
@@ -996,33 +996,6 @@ blocks:
     coordinate: [904, 1000.0]
     rotation: 0
     state: enabled
-- name: digital_symbol_sync_xx_0
-  id: digital_symbol_sync_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    constellation: digital.constellation_bpsk().base()
-    damping: '1.0'
-    loop_bw: phase_bw
-    max_dev: '1.5'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    nfilters: '32'
-    osps: '4'
-    pfb_mf_taps: rrc_taps
-    resamp_type: digital.IR_PFB_MF
-    sps: sps
-    ted_gain: '1.0'
-    ted_type: digital.TED_SIGNAL_TIMES_SLOPE_ML
-    type: cc
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1496, 480.0]
-    rotation: 0
-    state: enabled
 - name: digital_symbol_sync_xx_0_0
   id: digital_symbol_sync_xx
   parameters:
@@ -1048,6 +1021,33 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1352, 1456.0]
+    rotation: 0
+    state: enabled
+- name: digital_symbol_sync_xx_0_0_0
+  id: digital_symbol_sync_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: digital.constellation_bpsk().base()
+    damping: '1.0'
+    loop_bw: phase_bw
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilters: '32'
+    osps: '4'
+    pfb_mf_taps: rrc_taps
+    resamp_type: digital.IR_PFB_MF
+    sps: sps
+    ted_gain: '1.0'
+    ted_type: digital.TED_SIGNAL_TIMES_SLOPE_ML
+    type: cc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1456, 452.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -1079,7 +1079,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 32.0]
+    coordinate: [792, 40.0]
     rotation: 0
     state: enabled
 - name: epy_block_0_1_0
@@ -1191,7 +1191,7 @@ blocks:
       \        print(f\"[messenger_gui] Error processing feedback: {e}\")\n\n"
     affinity: ''
     alias: ''
-    bg_image: '''/home/vboxuser/Downloads/tx.jpg'''
+    bg_image: '''/home/senuda/Downloads/Networks_Telecommunications.jpg'''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1319,8 +1319,8 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     pkt_size: '32'
-    retry_limit: '16'
-    wait_time: '0.2'
+    retry_limit: '100'
+    wait_time: '0.1'
     window_size: '7'
   states:
     _io_cache: '(''GUI Text to PDU with Go-Back-N ARQ'', ''pdu_text_gui'', [(''wait_time'',
@@ -1514,7 +1514,7 @@ blocks:
       \    sys.exit(app.app.exec_())\n\n"
     affinity: ''
     alias: ''
-    bg_image: '''/home/vboxuser/Downloads/Networks_Telecommunications.jpg'''
+    bg_image: '''/home/senuda/Downloads/tx.jpg'''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1637,9 +1637,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 120.0]
+    coordinate: [592, 168.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_6
   id: epy_block
   parameters:
@@ -1676,7 +1676,7 @@ blocks:
     bus_structure: null
     coordinate: [296, 1144.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
   parameters:
@@ -1868,7 +1868,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2032, 532.0]
+    coordinate: [2056, 472.0]
     rotation: 180
     state: enabled
 - name: qtgui_const_sink_x_0_0
@@ -1961,87 +1961,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [2056, 1516.0]
-    rotation: 0
-    state: enabled
-- name: qtgui_freq_sink_x_0
-  id: qtgui_freq_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha10: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    autoscale: 'False'
-    average: '1.0'
-    axislabels: 'True'
-    bw: samp_rate
-    color1: '"blue"'
-    color10: '"dark blue"'
-    color2: '"red"'
-    color3: '"green"'
-    color4: '"black"'
-    color5: '"cyan"'
-    color6: '"magenta"'
-    color7: '"yellow"'
-    color8: '"dark red"'
-    color9: '"dark green"'
-    comment: Frequency Spectrum of Tx
-    ctrlpanel: 'False'
-    fc: '0'
-    fftsize: '1024'
-    freqhalf: 'True'
-    grid: 'False'
-    gui_hint: ''
-    label: Relative Gain
-    label1: ''
-    label10: ''''''
-    label2: ''''''
-    label3: ''''''
-    label4: ''''''
-    label5: ''''''
-    label6: ''''''
-    label7: ''''''
-    label8: ''''''
-    label9: ''''''
-    legend: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    name: TX - Spectrum
-    nconnections: '1'
-    norm_window: 'False'
-    showports: 'False'
-    tr_chan: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_tag: '""'
-    type: complex
-    units: dB
-    update_time: '0.10'
-    width1: '1'
-    width10: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
-    ymax: '10'
-    ymin: '-140'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [784, 676.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0_0
@@ -2424,20 +2343,20 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '10000'
-    center_freq: 1.2e9
+    center_freq: 2.4e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
-    gain: txgain
-    samp_rate: samp_rate_blade*2
+    gain: '50'
+    samp_rate: samp_rate_blade*4
     type: fc32
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 316.0]
+    coordinate: [944, 304.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: soapy_bladerf_sink_0_0
   id: soapy_bladerf_sink
   parameters:
@@ -2448,7 +2367,7 @@ blocks:
     comment: ''
     dev_args: ''
     freq_correction: '0'
-    gain: txgain
+    gain: '50'
     samp_rate: samp_rate_blade*2
     type: fc32
   states:
@@ -2468,18 +2387,18 @@ blocks:
     comment: ''
     dev_args: ''
     freq_correction: '0'
-    gain: '30.0'
+    gain: '50'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: samp_rate*2
+    samp_rate: samp_rate*4
     type: fc32
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 364.0]
+    coordinate: [1216, 352.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: soapy_bladerf_source_0_0
   id: soapy_bladerf_source
   parameters:
@@ -2589,20 +2508,19 @@ connections:
 - [blocks_repack_bits_bb_1_0, '0', virtual_sink_1, '0']
 - [blocks_tagged_stream_mux_0, '0', virtual_sink_0_0, '0']
 - [blocks_tagged_stream_mux_0_0, '0', digital_constellation_modulator_0_0, '0']
+- [blocks_throttle2_0, '0', blocks_multiply_const_vxx_0, '0']
 - [blocks_throttle2_0, '0', channels_channel_model_0, '0']
 - [blocks_throttle2_0_0, '0', channels_channel_model_0_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_0, '0']
 - [blocks_unpack_k_bits_bb_0_0, '0', digital_correlate_access_code_xx_ts_0_0, '0']
-- [channels_channel_model_0, '0', digital_symbol_sync_xx_0, '0']
+- [channels_channel_model_0, '0', digital_symbol_sync_xx_0_0_0, '0']
 - [channels_channel_model_0, '0', qtgui_freq_sink_x_1, '0']
 - [channels_channel_model_0_0, '0', digital_symbol_sync_xx_0_0, '0']
 - [channels_channel_model_0_0, '0', qtgui_freq_sink_x_1_0, '0']
 - [digital_constellation_decoder_cb_0, '0', blocks_char_to_float_0, '0']
 - [digital_constellation_decoder_cb_0, '0', digital_diff_decoder_bb_0, '0']
 - [digital_constellation_decoder_cb_0_0, '0', digital_diff_decoder_bb_0_0, '0']
-- [digital_constellation_modulator_0, '0', blocks_multiply_const_vxx_0, '0']
 - [digital_constellation_modulator_0, '0', blocks_throttle2_0, '0']
-- [digital_constellation_modulator_0, '0', qtgui_freq_sink_x_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_throttle2_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', qtgui_freq_sink_x_0_0, '0']
@@ -2612,6 +2530,7 @@ connections:
 - [digital_costas_loop_cc_0, '0', qtgui_const_sink_x_0, '0']
 - [digital_costas_loop_cc_0_0, '0', digital_constellation_decoder_cb_0_0, '0']
 - [digital_costas_loop_cc_0_0, '0', qtgui_const_sink_x_0_0, '0']
+- [digital_crc_append_0, out, epy_block_0, in]
 - [digital_crc_append_0, out, epy_block_5, in]
 - [digital_diff_decoder_bb_0, '0', digital_map_bb_0, '0']
 - [digital_diff_decoder_bb_0_0, '0', digital_map_bb_0_0, '0']
@@ -2624,12 +2543,13 @@ connections:
 - [digital_protocol_formatter_async_0_0, header, pdu_pdu_to_tagged_stream_0_1, pdus]
 - [digital_protocol_formatter_async_0_0, payload, pdu_pdu_to_tagged_stream_0_0_0,
   pdus]
-- [digital_symbol_sync_xx_0, '0', digital_linear_equalizer_0_0, '0']
 - [digital_symbol_sync_xx_0_0, '0', digital_linear_equalizer_0_0_0, '0']
+- [digital_symbol_sync_xx_0_0_0, '0', digital_linear_equalizer_0_0, '0']
 - [epy_block_0, out, digital_protocol_formatter_async_0, in]
 - [epy_block_0_1_0, out, epy_block_2_0, in]
 - [epy_block_2_0, feedback, epy_block_0_1_0, feedback]
 - [epy_block_2_0, out, digital_crc_append_0, in]
+- [epy_block_3, out, epy_block_4_0, in]
 - [epy_block_3, out, epy_block_6, in]
 - [epy_block_3_0, out, epy_block_2_0, ack_in]
 - [epy_block_4_0, ack_out, digital_protocol_formatter_async_0_0, in]
@@ -2642,7 +2562,7 @@ connections:
 - [pdu_pdu_to_tagged_stream_0_1, '0', blocks_tagged_stream_mux_0_0, '0']
 - [pdu_tagged_stream_to_pdu_0, pdus, epy_block_3, in]
 - [pdu_tagged_stream_to_pdu_0_0, pdus, epy_block_3_0, in]
-- [soapy_bladerf_source_0, '0', digital_symbol_sync_xx_0, '0']
+- [soapy_bladerf_source_0, '0', digital_symbol_sync_xx_0_0_0, '0']
 - [soapy_bladerf_source_0, '0', qtgui_freq_sink_x_1, '0']
 - [soapy_bladerf_source_0_0, '0', digital_symbol_sync_xx_0_0, '0']
 - [soapy_bladerf_source_0_0, '0', qtgui_freq_sink_x_1_0, '0']
