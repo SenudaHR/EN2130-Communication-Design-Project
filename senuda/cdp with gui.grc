@@ -170,7 +170,7 @@ blocks:
     start: '0.0'
     step: '0.01'
     stop: '1.0'
-    value: '0.005'
+    value: 6.28/100.0
     widget: slider
   states:
     bus_sink: false
@@ -526,7 +526,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1568, 1192.0]
+    coordinate: [1480, 1144.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -540,14 +540,14 @@ blocks:
     maximum: '0.1'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_second: samp_rate*2
-    type: complex
+    samples_per_second: samp_rate
+    type: byte
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 536.0]
+    coordinate: [168, 584.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0_0
@@ -906,7 +906,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1792, 464.0]
+    coordinate: [1808, 544.0]
     rotation: 0
     state: enabled
 - name: digital_linear_equalizer_0_0_0
@@ -1020,7 +1020,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1448, 548.0]
+    coordinate: [1408, 540.0]
     rotation: 0
     state: enabled
 - name: digital_symbol_sync_xx_0_0
@@ -1319,7 +1319,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     pkt_size: '32'
-    retry_limit: '100'
+    retry_limit: '1000'
     wait_time: '0.2'
     window_size: '7'
   states:
@@ -2508,7 +2508,7 @@ connections:
 - [blocks_repack_bits_bb_1_0, '0', virtual_sink_1, '0']
 - [blocks_tagged_stream_mux_0, '0', virtual_sink_0_0, '0']
 - [blocks_tagged_stream_mux_0_0, '0', digital_constellation_modulator_0_0, '0']
-- [blocks_throttle2_0, '0', blocks_multiply_const_vxx_0, '0']
+- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
 - [blocks_throttle2_0_0, '0', channels_channel_model_0_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_0, '0']
 - [blocks_unpack_k_bits_bb_0_0, '0', digital_correlate_access_code_xx_ts_0_0, '0']
@@ -2519,7 +2519,7 @@ connections:
 - [digital_constellation_decoder_cb_0, '0', blocks_char_to_float_0, '0']
 - [digital_constellation_decoder_cb_0, '0', digital_diff_decoder_bb_0, '0']
 - [digital_constellation_decoder_cb_0_0, '0', digital_diff_decoder_bb_0_0, '0']
-- [digital_constellation_modulator_0, '0', blocks_throttle2_0, '0']
+- [digital_constellation_modulator_0, '0', blocks_multiply_const_vxx_0, '0']
 - [digital_constellation_modulator_0, '0', channels_channel_model_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_throttle2_0_0, '0']
@@ -2564,7 +2564,7 @@ connections:
 - [soapy_bladerf_source_0, '0', qtgui_freq_sink_x_1, '0']
 - [soapy_bladerf_source_0_0, '0', digital_symbol_sync_xx_0_0, '0']
 - [soapy_bladerf_source_0_0, '0', qtgui_freq_sink_x_1_0, '0']
-- [virtual_source_0, '0', digital_constellation_modulator_0, '0']
+- [virtual_source_0, '0', blocks_throttle2_0, '0']
 - [virtual_source_1, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [virtual_source_2, '0', pdu_tagged_stream_to_pdu_0_0, '0']
 
