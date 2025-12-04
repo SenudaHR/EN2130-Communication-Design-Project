@@ -616,7 +616,7 @@ blocks:
     minoutbuf: '0'
     noise_voltage: noise_volt
     seed: '0'
-    taps: '3'
+    taps: '4'
   states:
     bus_sink: false
     bus_source: false
@@ -906,7 +906,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1808, 544.0]
+    coordinate: [1768, 600.0]
     rotation: 0
     state: enabled
 - name: digital_linear_equalizer_0_0_0
@@ -1004,7 +1004,7 @@ blocks:
     comment: ''
     constellation: digital.constellation_bpsk().base()
     damping: '1.0'
-    loop_bw: phase_bw
+    loop_bw: timing_loop_bw
     max_dev: '1.5'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1020,7 +1020,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1408, 540.0]
+    coordinate: [1384, 548.0]
     rotation: 0
     state: enabled
 - name: digital_symbol_sync_xx_0_0
@@ -1031,7 +1031,7 @@ blocks:
     comment: ''
     constellation: digital.constellation_bpsk().base()
     damping: '1.0'
-    loop_bw: phase_bw
+    loop_bw: timing_loop_bw
     max_dev: '1.5'
     maxoutbuf: '0'
     minoutbuf: '0'
