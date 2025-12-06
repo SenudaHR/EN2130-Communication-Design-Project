@@ -5,7 +5,7 @@ options:
     category: Custom
     cmake_opt: ''
     comment: ''
-    copyright: BellLabz
+    copyright: ''
     description: cdp project
     gen_cmake: 'On'
     gen_linking: dynamic
@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2672, 72.0]
+    coordinate: [2640, 84.0]
     rotation: 0
     state: enabled
 - name: eq_gain
@@ -70,12 +70,12 @@ blocks:
   id: variable
   parameters:
     comment: Set Bandwidth
-    value: '.35'
+    value: '.5'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2568, 88.0]
+    coordinate: [2464, 28.0]
     rotation: 0
     state: enabled
 - name: freq_offset
@@ -96,7 +96,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3216, 240.0]
+    coordinate: [3072, 152.0]
     rotation: 0
     state: enabled
 - name: hdr_format
@@ -155,7 +155,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2888, 432.0]
+    coordinate: [3016, 0.0]
     rotation: 0
     state: enabled
 - name: phase_bw
@@ -188,7 +188,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2584, 360.0]
+    coordinate: [2616, 268.0]
     rotation: 0
     state: enabled
 - name: qpsk
@@ -208,7 +208,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3208, 612.0]
+    coordinate: [3216, 660.0]
     rotation: 0
     state: enabled
 - name: rf_gain_0
@@ -229,7 +229,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3576, 592.0]
+    coordinate: [3592, 448.0]
     rotation: 0
     state: enabled
 - name: rrc_taps
@@ -241,7 +241,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3048, 80.0]
+    coordinate: [2832, 4.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -277,7 +277,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2776, 24.0]
+    coordinate: [2704, 20.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -289,7 +289,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2896, 80.0]
+    coordinate: [2824, 84.0]
     rotation: 0
     state: enabled
 - name: time_offset
@@ -323,15 +323,15 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0.0'
-    step: '0.001'
+    step: '0.01'
     stop: '0.2'
-    value: '0.005'
+    value: 6.28/100.0
     widget: slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3392, 88.0]
+    coordinate: [3200, 8.0]
     rotation: 0
     state: enabled
 - name: txbw
@@ -343,7 +343,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2480, 320.0]
+    coordinate: [2512, 204.0]
     rotation: 0
     state: enabled
 - name: variable_adaptive_algorithm_0
@@ -360,7 +360,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2440, 464.0]
+    coordinate: [2184, 4.0]
     rotation: 0
     state: enabled
 - name: variable_qtgui_entry_0
@@ -393,7 +393,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2880, 280.0]
+    coordinate: [2912, 180.0]
     rotation: 0
     state: enabled
 - name: blocks_char_to_float_0
@@ -428,7 +428,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768.0, 400]
+    coordinate: [792.0, 408]
     rotation: 90
     state: disabled
 - name: blocks_multiply_const_vxx_0_0
@@ -446,7 +446,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744.0, 1336]
+    coordinate: [648.0, 1400]
     rotation: 90
     state: disabled
 - name: blocks_repack_bits_bb_1
@@ -526,7 +526,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1480, 1144.0]
+    coordinate: [1624, 1120.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -541,13 +541,13 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samples_per_second: samp_rate
-    type: byte
+    type: complex
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [168, 584.0]
+    coordinate: [880, 540.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0_0
@@ -568,7 +568,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 1560.0]
+    coordinate: [744, 1508.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
@@ -616,12 +616,12 @@ blocks:
     minoutbuf: '0'
     noise_voltage: noise_volt
     seed: '0'
-    taps: '4'
+    taps: '3'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1008, 560.0]
+    coordinate: [1208, 496.0]
     rotation: 0
     state: enabled
 - name: channels_channel_model_0_0
@@ -642,7 +642,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 1536.0]
+    coordinate: [1056, 1416.0]
     rotation: 0
     state: enabled
 - name: controls
@@ -710,7 +710,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1816, 1840.0]
+    coordinate: [1984, 1832.0]
     rotation: 180
     state: enabled
 - name: digital_constellation_modulator_0
@@ -732,7 +732,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [344, 544.0]
+    coordinate: [504, 516.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -743,7 +743,7 @@ blocks:
     comment: Modulation block
     constellation: qpsk
     differential: 'True'
-    excess_bw: excess_bw
+    excess_bw: '0.35'
     log: 'False'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -754,7 +754,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 1552.0]
+    coordinate: [384, 1496.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_xx_ts_0
@@ -810,7 +810,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2056, 632.0]
+    coordinate: [1944, 616.0]
     rotation: 0
     state: enabled
 - name: digital_costas_loop_cc_0_0
@@ -828,7 +828,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1800, 1592.0]
+    coordinate: [1960, 1504.0]
     rotation: 0
     state: enabled
 - name: digital_crc_append_0
@@ -851,7 +851,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [504, 272.0]
+    coordinate: [536, 68.0]
     rotation: 0
     state: enabled
 - name: digital_diff_decoder_bb_0
@@ -899,14 +899,14 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     num_taps: '32'
-    sps: '2'
+    sps: '4'
     training_sequence: '[ ]'
     training_start_tag: corr_est
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1768, 600.0]
+    coordinate: [1808, 392.0]
     rotation: 0
     state: enabled
 - name: digital_linear_equalizer_0_0_0
@@ -927,7 +927,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1704, 1392.0]
+    coordinate: [1712, 1360.0]
     rotation: 0
     state: enabled
 - name: digital_map_bb_0
@@ -977,7 +977,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [864, 176.0]
+    coordinate: [968, 184.0]
     rotation: 0
     state: enabled
 - name: digital_protocol_formatter_async_0_0
@@ -1004,12 +1004,12 @@ blocks:
     comment: ''
     constellation: digital.constellation_bpsk().base()
     damping: '1.0'
-    loop_bw: timing_loop_bw
+    loop_bw: phase_bw
     max_dev: '1.5'
     maxoutbuf: '0'
     minoutbuf: '0'
     nfilters: '32'
-    osps: '2'
+    osps: '4'
     pfb_mf_taps: rrc_taps
     resamp_type: digital.IR_PFB_MF
     sps: sps
@@ -1020,7 +1020,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1384, 548.0]
+    coordinate: [1496, 480.0]
     rotation: 0
     state: enabled
 - name: digital_symbol_sync_xx_0_0
@@ -1031,7 +1031,7 @@ blocks:
     comment: ''
     constellation: digital.constellation_bpsk().base()
     damping: '1.0'
-    loop_bw: timing_loop_bw
+    loop_bw: phase_bw
     max_dev: '1.5'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1047,7 +1047,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1352, 1456.0]
+    coordinate: [1400, 1412.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -1066,7 +1066,7 @@ blocks:
       \  # prepend address\n            data.insert(0, self.address)\n           \
       \ out_msg = pmt.cons(meta, pmt.init_u8vector(len(data), data))\n           \
       \ self.message_port_pub(pmt.intern(\"out\"), out_msg)\n"
-    address: '20'
+    address: '21'
     affinity: ''
     alias: ''
     comment: ''
@@ -1074,18 +1074,18 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('address_add', 'address_add', [('address', '1')], [('in', 'message',
-      1)], [('out', 'message', 1)], '\n    Block to prepend an address byte to a PDU
-      payload\n    ', ['address'])
+      1)], [('out', 'message', 1)], '\nBlock to prepend an address byte to a PDU payload\n',
+      ['address'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 32.0]
+    coordinate: [808, 128.0]
     rotation: 0
     state: enabled
 - name: epy_block_0_1_0
   id: epy_block
   parameters:
-    _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nfrom gnuradio\
+    _source_code: "\n#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nfrom gnuradio\
       \ import gr\nfrom PyQt5 import QtWidgets, QtCore, QtGui\nimport sys\nimport\
       \ pmt\nimport time\nfrom datetime import datetime  # for timestamps\n\nclass\
       \ WallpaperScrollArea(QtWidgets.QScrollArea):\n    def __init__(self, bg_image=\"\
@@ -1197,14 +1197,13 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Messenger GUI', 'messenger_gui', [('bg_image', "''")], [('feedback',
-      'message', 1)], [('out', 'message', 1)], '\n    WhatsApp-style Messenger GUI
-      with dynamic bubble resizing,\n    horizontal scroll for long messages, timestamp
-      update on delivery,\n    and failure indication if retry limit is exceeded.\n    ',
-      [])
+      'message', 1)], [('out', 'message', 1)], '\nWhatsApp-style Messenger GUI with
+      dynamic bubble resizing,\nhorizontal scroll for long messages, timestamp update
+      on delivery,\nand failure indication if retry limit is exceeded.\n', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [136, 184.0]
+    coordinate: [128, 304.0]
     rotation: 180
     state: enabled
 - name: epy_block_2_0
@@ -1218,17 +1217,14 @@ blocks:
       \    - On timeout, retransmits all unACKed packets in window\n    - After full\
       \ message, sends END packet [address, seq_id] (no payload)\n    - Sends feedback\
       \ to GUI when END ACK is received\n    - Sends feedback if retry limit is exceeded\n\
-      \    - Next message starts from the first unacknowledged sequence number\n \
-      \   \"\"\"\n\n    def __init__(self, wait_time=2.0, pkt_size=32, address=0x01,\
+      \    \"\"\"\n\n    def __init__(self, wait_time=2.0, pkt_size=32, address=0x01,\
       \ retry_limit=100, window_size=4):\n        gr.basic_block.__init__(\n     \
       \       self,\n            name=\"GUI Text to PDU with Go-Back-N ARQ\",\n  \
       \          in_sig=[],\n            out_sig=[]\n        )\n\n        # Parameters\n\
       \        self._timeout = float(wait_time)\n        self._pkt_size = int(pkt_size)\n\
       \        self._address = int(address) & 0xFF\n        self._retry_limit = int(retry_limit)\n\
-      \        self._window_size = int(window_size)\n\n        # Sequence control\n\
-      \        self._seq_id = 1          # next sequence ID to start with\n      \
-      \  self._last_ack_seq = 0    # last acknowledged ID\n        self._has_acks\
-      \ = False    # tracks if any ACKs have been received\n\n        # Message ports\n\
+      \        self._window_size = int(window_size)\n\n        # Sequence ID\n   \
+      \     self._seq_id = 1  # 0x01..0xFF, avoid 0x00\n\n        # Message ports\n\
       \        self.message_port_register_out(pmt.intern(\"out\"))\n        self.message_port_register_out(pmt.intern(\"\
       feedback\"))  # feedback port for GUI\n\n        self.message_port_register_in(pmt.intern(\"\
       in\"))\n        self.message_port_register_in(pmt.intern(\"ack_in\"))\n\n  \
@@ -1237,56 +1233,55 @@ blocks:
       \   # Thread + synchronization\n        self._thread = None\n        self._stop_event\
       \ = threading.Event()\n        self._lock = threading.Lock()\n\n        # Buffers\n\
       \        self._text_data = b\"\"\n        self._packets = []\n        self._base\
-      \ = 0\n        self._next_to_send = 0\n        self._attempts = 0\n        self._end_seq_id\
-      \ = 0\n\n    # ---------------------------\n    # Message handler from GUI\n\
-      \    # ---------------------------\n    def _process_text(self, msg):\n    \
-      \    try:\n            if pmt.is_symbol(msg):\n                text_str = pmt.symbol_to_string(msg)\n\
-      \            elif pmt.is_string(msg):\n                text_str = pmt.string_to_string(msg)\n\
-      \            else:\n                print(\"[pdu_text_gui] Invalid PMT message\
-      \ type\")\n                return\n\n            self._text_data = text_str.encode(\"\
-      utf-8\")\n\n            # Start sending in a separate thread\n            if\
-      \ self._thread is None or not self._thread.is_alive():\n                self._stop_event.clear()\n\
+      \ = 0          # first unACKed packet index\n        self._next_to_send = 0\
+      \  # next packet index to send\n        self._attempts = 0\n        self._end_seq_id\
+      \ = 0     # store END packet seq_id for feedback\n\n    # ---------------------------\n\
+      \    # Message handler from GUI\n    # ---------------------------\n    def\
+      \ _process_text(self, msg):\n        try:\n            if pmt.is_symbol(msg):\n\
+      \                text_str = pmt.symbol_to_string(msg)\n            elif pmt.is_string(msg):\n\
+      \                text_str = pmt.string_to_string(msg)\n            else:\n \
+      \               print(\"[pdu_text_gui] Invalid PMT message type\")\n       \
+      \         return\n\n            self._text_data = text_str.encode(\"utf-8\"\
+      )\n\n            # Start sending in a separate thread\n            if self._thread\
+      \ is None or not self._thread.is_alive():\n                self._stop_event.clear()\n\
       \                self._thread = threading.Thread(target=self._run)\n       \
       \         self._thread.daemon = True\n                self._thread.start()\n\
       \n        except Exception as e:\n            print(f\"[pdu_text_gui] Error\
       \ processing text: {e}\")\n\n    # ---------------------------\n    # Sending\
       \ loop (Go-Back-N)\n    # ---------------------------\n    def _run(self):\n\
       \        raw = self._text_data\n        step = self._pkt_size - 2\n        blocks\
-      \ = [raw[i:i+step] for i in range(0, len(raw), step)]\n\n        # Determine\
-      \ starting seq_id\n        if self._has_acks:\n            # continue from the\
-      \ next unACKed sequence\n            self._seq_id = (self._last_ack_seq + 1)\
-      \ & 0xFF\n            if self._seq_id == 0:\n                self._seq_id =\
-      \ 1\n        else:\n            self._seq_id = 1\n\n        print(f\"[pdu_text_gui]\
-      \ Starting new message at seq=0x{self._seq_id:02X}\")\n\n        # Build packets\n\
-      \        self._packets = []\n        for block in blocks:\n            packet\
-      \ = bytes([self._address, self._seq_id]) + block\n            self._packets.append((self._seq_id,\
-      \ packet))\n            self._seq_id = (self._seq_id + 1) & 0xFF\n         \
-      \   if self._seq_id == 0:\n                self._seq_id = 1\n\n        # Add\
-      \ END packet\n        end_packet = bytes([self._address, self._seq_id])\n  \
-      \      self._packets.append((self._seq_id, end_packet))\n        self._end_seq_id\
-      \ = self._seq_id\n        print(f\"[pdu_text_gui] End packet prepared (id=0x{self._seq_id:02X})\"\
-      )\n\n        self._seq_id = (self._seq_id + 1) & 0xFF\n        if self._seq_id\
-      \ == 0:\n            self._seq_id = 1\n\n        # Reset window variables\n\
-      \        self._base = 0\n        self._next_to_send = 0\n        self._attempts\
-      \ = 0\n\n        while self._base < len(self._packets) and not self._stop_event.is_set():\n\
-      \            with self._lock:\n                # Send up to window_size packets\n\
-      \                while self._next_to_send < self._base + self._window_size and\
-      \ self._next_to_send < len(self._packets):\n                    seq_id, packet\
-      \ = self._packets[self._next_to_send]\n                    vec = pmt.init_u8vector(len(packet),\
-      \ list(packet))\n                    pdu = pmt.cons(pmt.PMT_NIL, vec)\n    \
-      \                self.message_port_pub(pmt.intern(\"out\"), pdu)\n         \
-      \           if len(packet) > 2:\n                        print(f\"[pdu_text_gui]\
-      \ Packet id=0x{seq_id:02X} sent\")\n                    else:\n            \
-      \            print(f\"[pdu_text_gui] END packet id=0x{seq_id:02X} sent\")\n\
-      \                    self._next_to_send += 1\n\n            # Wait for ACK\n\
-      \            time.sleep(self._timeout)\n\n            with self._lock:\n   \
-      \             if self._base < self._next_to_send:\n                    self._attempts\
-      \ += 1\n                    if self._attempts >= self._retry_limit:\n      \
-      \                  print(\"[pdu_text_gui] Failed: retry limit exceeded\")\n\
-      \                        self.message_port_pub(pmt.intern(\"feedback\"), pmt.intern(\"\
-      RETRY_LIMIT_EXCEEDED\"))\n                        self._stop_event.set()\n \
-      \                       break\n\n                    print(\"[pdu_text_gui]\
-      \ Timeout: retransmitting window\")\n                    for i in range(self._base,\
+      \ = [raw[i:i+step] for i in range(0, len(raw), step)]\n\n        # Build packets\
+      \ with headers\n        self._packets = []\n        for block in blocks:\n \
+      \           packet = bytes([self._address, self._seq_id]) + block\n        \
+      \    self._packets.append((self._seq_id, packet))\n            self._seq_id\
+      \ = (self._seq_id + 1) & 0xFF\n            if self._seq_id == 0:\n         \
+      \       self._seq_id = 1\n\n        # Add END packet (address + seq_id, no payload)\n\
+      \        end_packet = bytes([self._address, self._seq_id])\n        self._packets.append((self._seq_id,\
+      \ end_packet))\n        self._end_seq_id = self._seq_id  # store END packet\
+      \ seq_id for feedback\n        print(f\"[pdu_text_gui] End packet prepared (id=0x{self._seq_id:02X})\"\
+      )\n        self._seq_id = (self._seq_id + 1) & 0xFF\n        if self._seq_id\
+      \ == 0:\n            self._seq_id = 1\n\n        self._base = 0\n        self._next_to_send\
+      \ = 0\n        self._attempts = 0\n\n        while self._base < len(self._packets)\
+      \ and not self._stop_event.is_set():\n            with self._lock:\n       \
+      \         # Send up to window_size packets\n                while self._next_to_send\
+      \ < self._base + self._window_size and self._next_to_send < len(self._packets):\n\
+      \                    seq_id, packet = self._packets[self._next_to_send]\n  \
+      \                  vec = pmt.init_u8vector(len(packet), list(packet))\n    \
+      \                pdu = pmt.cons(pmt.PMT_NIL, vec)\n                    self.message_port_pub(pmt.intern(\"\
+      out\"), pdu)\n                    if len(packet) > 2:\n                    \
+      \    print(f\"[pdu_text_gui] Packet id=0x{seq_id:02X} sent\")\n            \
+      \        else:\n                        print(f\"[pdu_text_gui] END packet id=0x{seq_id:02X}\
+      \ sent\")\n                    self._next_to_send += 1\n\n            # Wait\
+      \ for ACK\n            time.sleep(self._timeout)\n\n            with self._lock:\n\
+      \                if self._base < self._next_to_send:  # still unACKed packets\n\
+      \                    self._attempts += 1\n                    if self._attempts\
+      \ >= self._retry_limit:\n                        print(\"[pdu_text_gui] Failed:\
+      \ retry limit exceeded\")\n                        # Send feedback to GUI about\
+      \ retry limit exceeded\n                        self.message_port_pub(pmt.intern(\"\
+      feedback\"), pmt.intern(\"RETRY_LIMIT_EXCEEDED\"))\n                       \
+      \ self._stop_event.set()\n                        break\n                  \
+      \  print(\"[pdu_text_gui] Timeout: retransmitting window\")\n              \
+      \      # retransmit all unACKed packets\n                    for i in range(self._base,\
       \ self._next_to_send):\n                        seq_id, packet = self._packets[i]\n\
       \                        vec = pmt.init_u8vector(len(packet), list(packet))\n\
       \                        pdu = pmt.cons(pmt.PMT_NIL, vec)\n                \
@@ -1302,16 +1297,15 @@ blocks:
       \            with self._lock:\n                # slide window if ACK is valid\n\
       \                for i in range(self._base, self._next_to_send):\n         \
       \           seq_id, _ = self._packets[i]\n                    if seq_id == ack_id:\n\
-      \                        self._has_acks = True\n                        self._last_ack_seq\
-      \ = ack_id  # save last ACKed seq\n                        if len(self._packets[i][1])\
-      \ > 2:\n                            print(f\"[pdu_text_gui] ACK received for\
-      \ id=0x{ack_id:02X}\")\n                        else:\n                    \
-      \        print(f\"[pdu_text_gui] ACK received for END id=0x{ack_id:02X}\")\n\
-      \                            self.message_port_pub(pmt.intern(\"feedback\"),\
-      \ pmt.intern(\"END_ACK_RECEIVED\"))\n                        self._base = i\
-      \ + 1\n                        self._attempts = 0\n                        break\n\
-      \n        except Exception as e:\n            print(f\"[pdu_text_gui] Error\
-      \ processing ACK: {e}\")\n\n"
+      \                        if len(self._packets[i][1]) > 2:\n                \
+      \            print(f\"[pdu_text_gui] ACK received for id=0x{ack_id:02X}\")\n\
+      \                        else:\n                            print(f\"[pdu_text_gui]\
+      \ ACK received for END id=0x{ack_id:02X}\")\n                            # Send\
+      \ feedback to GUI for final ACK\n                            self.message_port_pub(pmt.intern(\"\
+      feedback\"), pmt.intern(\"END_ACK_RECEIVED\"))\n                        self._base\
+      \ = i + 1\n                        self._attempts = 0  # reset retries\n   \
+      \                     break\n\n        except Exception as e:\n            print(f\"\
+      [pdu_text_gui] Error processing ACK: {e}\")\n\n"
     address: '21'
     affinity: ''
     alias: ''
@@ -1319,25 +1313,24 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     pkt_size: '32'
-    retry_limit: '1000'
+    retry_limit: '16'
     wait_time: '0.2'
     window_size: '7'
   states:
     _io_cache: '(''GUI Text to PDU with Go-Back-N ARQ'', ''pdu_text_gui'', [(''wait_time'',
       ''2.0''), (''pkt_size'', ''32''), (''address'', ''1''), (''retry_limit'', ''100''),
       (''window_size'', ''4'')], [(''ack_in'', ''message'', 1), (''in'', ''message'',
-      1)], [(''feedback'', ''message'', 1), (''out'', ''message'', 1)], ''\n    Custom
-      block: QT GUI Message Entry -> PDU sender with Go-Back-N ARQ.\n    - Splits
-      text into packets (2 bytes: [address, seq_id] + payload)\n    - Sends packets
-      in a sliding window\n    - Waits for ACKs [0xAA, seq_id]\n    - On timeout,
-      retransmits all unACKed packets in window\n    - After full message, sends END
-      packet [address, seq_id] (no payload)\n    - Sends feedback to GUI when END
-      ACK is received\n    - Sends feedback if retry limit is exceeded\n    - Next
-      message starts from the first unacknowledged sequence number\n    '', [])'
+      1)], [(''feedback'', ''message'', 1), (''out'', ''message'', 1)], ''\nCustom
+      block: QT GUI Message Entry -> PDU sender with Go-Back-N ARQ.\n- Splits text
+      into packets (2 bytes: [address, seq_id] + payload)\n- Sends packets in a sliding
+      window\n- Waits for ACKs [0xAA, seq_id]\n- On timeout, retransmits all unACKed
+      packets in window\n- After full message, sends END packet [address, seq_id]
+      (no payload)\n- Sends feedback to GUI when END ACK is received\n- Sends feedback
+      if retry limit is exceeded\n'', [])'
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 272.0]
+    coordinate: [136, 128.0]
     rotation: 0
     state: enabled
 - name: epy_block_3
@@ -1362,11 +1355,11 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    my_address: '20'
+    my_address: '21'
   states:
     _io_cache: ('address_check', 'address_check', [('my_address', '1')], [('in', 'message',
-      1)], [('out', 'message', 1)], '\n    Block to check address and strip it if
-      matches\n    ', ['my_address'])
+      1)], [('out', 'message', 1)], '\nBlock to check address and strip it if matches\n',
+      ['my_address'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1398,8 +1391,8 @@ blocks:
     my_address: '21'
   states:
     _io_cache: ('address_check', 'address_check', [('my_address', '1')], [('in', 'message',
-      1)], [('out', 'message', 1)], '\n    Block to check address and strip it if
-      matches\n    ', ['my_address'])
+      1)], [('out', 'message', 1)], '\nBlock to check address and strip it if matches\n',
+      ['my_address'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1457,20 +1450,21 @@ blocks:
       \ < 1:\n            return\n\n        sender_bytes = data[0:1]\n        sender\
       \ = f\"Node {sender_bytes[0]:02X}\"\n        payload = data[1:]\n\n        try:\n\
       \            text = payload.decode(\"utf-8\", errors=\"ignore\")\n        except\
-      \ Exception:\n            text = \"<decode error>\"\n\n        if sender not\
-      \ in self.sender_msgs:\n            self.sender_msgs[sender] = []\n        \
-      \    self.add_sender_slot(sender)\n        self.sender_msgs[sender].append(text)\n\
-      \n        if self.current_sender != sender:\n            self.unread.add(sender)\n\
-      \            self.update_sender_slot(sender)\n\n        if self.current_sender\
-      \ == sender or self.current_sender is None:\n            self.display_sender_messages(sender)\n\
-      \n    def add_sender_slot(self, sender):\n        slot_widget = QtWidgets.QWidget()\n\
-      \        slot_widget.setFixedHeight(50)\n        slot_widget.setStyleSheet(\"\
-      \"\"\n            background-color: #2C3E50;\n            border-radius: 8px;\n\
-      \        \"\"\")\n        layout = QtWidgets.QHBoxLayout()\n        layout.setContentsMargins(10,0,10,0)\n\
-      \        slot_widget.setLayout(layout)\n\n        name_label = QtWidgets.QLabel(sender)\n\
-      \        name_label.setStyleSheet(\"color: white; font-weight: bold;\")\n  \
-      \      layout.addWidget(name_label, alignment=QtCore.Qt.AlignLeft)\n\n     \
-      \   dot_label = QtWidgets.QLabel(\"\\u25CF\")\n        dot_label.setStyleSheet(\"\
+      \ Exception:\n            text = \"<decode error>\"\n\n        # Store timestamp\
+      \ along with the text (HH:MM)\n        timestamp = datetime.now().strftime(\"\
+      %H:%M\")\n\n        if sender not in self.sender_msgs:\n            self.sender_msgs[sender]\
+      \ = []\n            self.add_sender_slot(sender)\n        self.sender_msgs[sender].append((text,\
+      \ timestamp))  # store as tuple\n\n        if self.current_sender != sender:\n\
+      \            self.unread.add(sender)\n            self.update_sender_slot(sender)\n\
+      \n        if self.current_sender == sender or self.current_sender is None:\n\
+      \            self.display_sender_messages(sender)\n\n    def add_sender_slot(self,\
+      \ sender):\n        slot_widget = QtWidgets.QWidget()\n        slot_widget.setFixedHeight(50)\n\
+      \        slot_widget.setStyleSheet(\"\"\"\n            background-color: #2C3E50;\n\
+      \            border-radius: 8px;\n        \"\"\")\n        layout = QtWidgets.QHBoxLayout()\n\
+      \        layout.setContentsMargins(10,0,10,0)\n        slot_widget.setLayout(layout)\n\
+      \n        name_label = QtWidgets.QLabel(sender)\n        name_label.setStyleSheet(\"\
+      color: white; font-weight: bold;\")\n        layout.addWidget(name_label, alignment=QtCore.Qt.AlignLeft)\n\
+      \n        dot_label = QtWidgets.QLabel(\"\\u25CF\")\n        dot_label.setStyleSheet(\"\
       color: yellow; font-weight: bold;\")\n        dot_label.setVisible(False)\n\
       \        layout.addWidget(dot_label, alignment=QtCore.Qt.AlignRight)\n\n   \
       \     slot_widget.mousePressEvent = lambda e, s=sender: self.display_sender_messages(s)\n\
@@ -1484,31 +1478,32 @@ blocks:
       \        for i in reversed(range(self.chat_layout.count())):\n            w\
       \ = self.chat_layout.takeAt(i).widget()\n            if w:\n               \
       \ w.deleteLater()\n\n        msgs = self.sender_msgs.get(sender, [])\n     \
-      \   for text in msgs:\n            self.add_bubble(text)\n\n        QtCore.QTimer.singleShot(50,\
-      \ lambda: self.scroll_area.verticalScrollBar().setValue(\n            self.scroll_area.verticalScrollBar().maximum()\n\
-      \        ))\n\n    def add_bubble(self, text):\n        # Chat bubble\n    \
-      \    bubble = QtWidgets.QLabel(text)\n        bubble.setWordWrap(True)\n   \
-      \     bubble.setStyleSheet(\"\"\"\n            QLabel {\n                background-color:\
-      \ #2196F3;\n                color: white;\n                border-radius: 15px;\n\
-      \                padding: 20px 30px;\n                font-size: 32px;\n   \
-      \         }\n        \"\"\")\n        bubble.setSizePolicy(QtWidgets.QSizePolicy.Expanding,\
+      \   for text, timestamp in msgs:  # unpack tuple\n            self.add_bubble(text,\
+      \ timestamp)  # pass timestamp\n\n        QtCore.QTimer.singleShot(50, lambda:\
+      \ self.scroll_area.verticalScrollBar().setValue(\n            self.scroll_area.verticalScrollBar().maximum()\n\
+      \        ))\n\n    def add_bubble(self, text, timestamp):\n        # Chat bubble\n\
+      \        bubble = QtWidgets.QLabel(text)\n        bubble.setWordWrap(True)\n\
+      \        bubble.setStyleSheet(\"\"\"\n            QLabel {\n               \
+      \ background-color: #2196F3;\n                color: white;\n              \
+      \  border-radius: 15px;\n                padding: 20px 30px;\n             \
+      \   font-size: 32px;\n            }\n        \"\"\")\n        bubble.setSizePolicy(QtWidgets.QSizePolicy.Expanding,\
       \ QtWidgets.QSizePolicy.Minimum)\n        bubble.setMaximumWidth(500)\n    \
       \    bubble.setMinimumHeight(bubble.sizeHint().height())\n\n        # Shadow\
       \ effect\n        effect = QtWidgets.QGraphicsDropShadowEffect()\n        effect.setBlurRadius(6)\n\
       \        effect.setXOffset(2)\n        effect.setYOffset(2)\n        effect.setColor(QtGui.QColor(0,0,0,100))\n\
       \        bubble.setGraphicsEffect(effect)\n\n        # Timestamp with small\
-      \ green \"pill\"\n        timestamp = QtWidgets.QLabel(datetime.now().strftime(\"\
-      %H:%M\"))\n        timestamp.setStyleSheet(\"\"\"\n            QLabel {\n  \
-      \              background-color: #4CAF50;  /* green background */\n        \
-      \        color: white;\n                font-size: 18px;\n                border-radius:\
-      \ 8px;\n                padding: 2px 6px;\n            }\n        \"\"\")\n\
-      \        timestamp.setAlignment(QtCore.Qt.AlignRight)\n        timestamp.setSizePolicy(QtWidgets.QSizePolicy.Fixed,\
-      \ QtWidgets.QSizePolicy.Fixed)  # <-- small pill only\n\n        # Container\
-      \ for bubble + timestamp\n        container = QtWidgets.QWidget()\n        layout\
-      \ = QtWidgets.QVBoxLayout()\n        layout.setAlignment(QtCore.Qt.AlignLeft)\n\
+      \ green \"pill\"\n        ts_label = QtWidgets.QLabel(timestamp)  # use stored\
+      \ timestamp (HH:MM)\n        ts_label.setStyleSheet(\"\"\"\n            QLabel\
+      \ {\n                background-color: #4CAF50;  /* green background */\n  \
+      \              color: white;\n                font-size: 18px;\n           \
+      \     border-radius: 8px;\n                padding: 2px 6px;\n            }\n\
+      \        \"\"\")\n        ts_label.setAlignment(QtCore.Qt.AlignRight)\n    \
+      \    ts_label.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)\n\
+      \n        # Container for bubble + timestamp\n        container = QtWidgets.QWidget()\n\
+      \        layout = QtWidgets.QVBoxLayout()\n        layout.setAlignment(QtCore.Qt.AlignLeft)\n\
       \        layout.setContentsMargins(0,0,0,0)\n        layout.addWidget(bubble)\n\
-      \        layout.addWidget(timestamp, alignment=QtCore.Qt.AlignRight)  # timestamp\
-      \ right-aligned\n        container.setLayout(layout)\n\n        self.chat_layout.addWidget(container,\
+      \        layout.addWidget(ts_label, alignment=QtCore.Qt.AlignRight)\n      \
+      \  container.setLayout(layout)\n\n        self.chat_layout.addWidget(container,\
       \ alignment=QtCore.Qt.AlignLeft)\n\n# Run GUI for standalone testing\nif __name__\
       \ == \"__main__\":\n    app = QtWidgets.QApplication(sys.argv)\n    gui = multi_sender_gui()\n\
       \    sys.exit(app.app.exec_())\n\n"
@@ -1520,9 +1515,8 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Multi-Sender PDU Viewer', 'multi_sender_gui', [('bg_image', "''")],
-      [('in', 'message', 1)], [], '\n    Multi-sender PDU GUI with dark bluish-grey
-      left panel\n    and Messenger-style scalable chat bubbles with timestamps.\n    ',
-      ['bg_image'])
+      [('in', 'message', 1)], [], '\nMulti-sender PDU GUI with dark bluish-grey left
+      panel\nand Messenger-style scalable chat bubbles with timestamps.\n', ['bg_image'])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1591,12 +1585,12 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: '(''CRC32 Dedup + Forwarder'', ''crc_forwarder'', [], [(''in'', ''message'',
-      1)], [(''ack_out'', ''message'', 1), (''out'', ''message'', 1)], "\n    CRC32
-      Checker + Dedup + Forwarder (Message Reassembler)\n    - Input : [sender_addr
-      | seq_id | payload | crc32]\n    - Output: [sender_addr | full_message] only
-      when end marker received\n    - End marker: valid packet with empty payload\n    -
-      Handles multiple senders dynamically\n    - ACK prepends transmitter''s address
-      and appends CRC32\n    ", [])'
+      1)], [(''ack_out'', ''message'', 1), (''out'', ''message'', 1)], "\nCRC32 Checker
+      + Dedup + Forwarder (Message Reassembler)\n- Input : [sender_addr | seq_id |
+      payload | crc32]\n- Output: [sender_addr | full_message] only when end marker
+      received\n- End marker: valid packet with empty payload\n- Handles multiple
+      senders dynamically\n- ACK prepends transmitter''s address and appends CRC32\n",
+      [])'
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1631,20 +1625,94 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('AES Encrypt', 'aes_encrypt', [('key', "b'1234567890abcdef'"), ('iv',
+      "b'abcdef1234567890'")], [('in', 'message', 1)], [('out', 'message', 1)], '\nAES
+      Encryption Block\n- Encrypts PDUs using AES-128-CBC\n- Key & IV fixed for demo
+      (replace with secure exchange in real systems)\n', ['iv', 'key'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 232.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_5_0
+  id: epy_block
+  parameters:
+    _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\nimport pmt\nfrom\
+      \ gnuradio import gr\nfrom Crypto.Cipher import AES\nfrom Crypto.Util.Padding\
+      \ import pad\n\nclass aes_encrypt(gr.basic_block):\n    \"\"\"\n    AES Encryption\
+      \ Block\n    - Encrypts PDUs using AES-128-CBC\n    - Key & IV fixed for demo\
+      \ (replace with secure exchange in real systems)\n    \"\"\"\n\n    def __init__(self,\
+      \ key=b\"1234567890abcdef\", iv=b\"abcdef1234567890\"):\n        gr.basic_block.__init__(\n\
+      \            self,\n            name=\"AES Encrypt\",\n            in_sig=[],\n\
+      \            out_sig=[]\n        )\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        self.message_port_register_out(pmt.intern(\"out\"))\n      \
+      \  self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n        self.key\
+      \ = key\n        self.iv = iv\n\n    def handle_msg(self, msg_pmt):\n      \
+      \  if pmt.is_pair(msg_pmt):\n            meta = pmt.car(msg_pmt)\n         \
+      \   data = bytes(pmt.u8vector_elements(pmt.cdr(msg_pmt)))\n\n            cipher\
+      \ = AES.new(self.key, AES.MODE_CBC, self.iv)\n            enc_data = cipher.encrypt(pad(data,\
+      \ AES.block_size))\n\n            out_pmt = pmt.cons(meta, pmt.init_u8vector(len(enc_data),\
+      \ list(enc_data)))\n            self.message_port_pub(pmt.intern(\"out\"), out_pmt)\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    iv: b"abcdef1234567890"
+    key: b"1234567890abcd30"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('AES Encrypt', 'aes_encrypt', [('key', "b'1234567890abcdef'"), ('iv',
       "b'abcdef1234567890'")], [('in', 'message', 1)], [('out', 'message', 1)], '\n    AES
       Encryption Block\n    - Encrypts PDUs using AES-128-CBC\n    - Key & IV fixed
       for demo (replace with secure exchange in real systems)\n    ', ['iv', 'key'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [640, 128.0]
+    coordinate: [784, 0.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_6
   id: epy_block
   parameters:
     _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\nimport pmt\nfrom\
       \ gnuradio import gr\nfrom Cryptodome.Cipher import AES\nfrom Cryptodome.Util.Padding\
+      \ import unpad\n\nclass aes_decrypt(gr.basic_block):\n    \"\"\"\n    AES Decryption\
+      \ Block\n    - Decrypts PDUs using AES-128-CBC\n    - Must use the same Key\
+      \ & IV as the Encrypt block\n    \"\"\"\n\n    def __init__(self, key=b\"1234567890abcdef\"\
+      , iv=b\"abcdef1234567890\"):\n        gr.basic_block.__init__(\n           \
+      \ self,\n            name=\"AES Decrypt\",\n            in_sig=[],\n       \
+      \     out_sig=[]\n        )\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        self.message_port_register_out(pmt.intern(\"out\"))\n      \
+      \  self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n        self.key\
+      \ = key\n        self.iv = iv\n\n    def handle_msg(self, msg_pmt):\n      \
+      \  if pmt.is_pair(msg_pmt):\n            meta = pmt.car(msg_pmt)\n         \
+      \   data = bytes(pmt.u8vector_elements(pmt.cdr(msg_pmt)))\n\n            cipher\
+      \ = AES.new(self.key, AES.MODE_CBC, self.iv)\n            dec_data = unpad(cipher.decrypt(data),\
+      \ AES.block_size)\n\n            out_pmt = pmt.cons(meta, pmt.init_u8vector(len(dec_data),\
+      \ list(dec_data)))\n            self.message_port_pub(pmt.intern(\"out\"), out_pmt)\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    iv: b"abcdef1234567890"
+    key: b"1234567890abcd30"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('AES Decrypt', 'aes_decrypt', [('key', "b'1234567890abcdef'"), ('iv',
+      "b'abcdef1234567890'")], [('in', 'message', 1)], [('out', 'message', 1)], '\nAES
+      Decryption Block\n- Decrypts PDUs using AES-128-CBC\n- Must use the same Key
+      & IV as the Encrypt block\n', ['iv', 'key'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 1144.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_6_0
+  id: epy_block
+  parameters:
+    _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\nimport pmt\nfrom\
+      \ gnuradio import gr\nfrom Crypto.Cipher import AES\nfrom Crypto.Util.Padding\
       \ import unpad\n\nclass aes_decrypt(gr.basic_block):\n    \"\"\"\n    AES Decryption\
       \ Block\n    - Decrypts PDUs using AES-128-CBC\n    - Must use the same Key\
       \ & IV as the Encrypt block\n    \"\"\"\n\n    def __init__(self, key=b\"1234567890abcdef\"\
@@ -1674,9 +1742,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 1144.0]
+    coordinate: [320, 1040.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
   parameters:
@@ -1691,7 +1759,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1160, 144.0]
+    coordinate: [1184, 88.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0_0
@@ -1708,7 +1776,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 232.0]
+    coordinate: [1216, 232.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0_0_0
@@ -1776,7 +1844,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 432.0]
+    coordinate: [344, 432.0]
     rotation: 180
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -1868,7 +1936,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2088, 504.0]
+    coordinate: [2032, 532.0]
     rotation: 180
     state: enabled
 - name: qtgui_const_sink_x_0_0
@@ -1960,7 +2028,88 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2056, 1516.0]
+    coordinate: [2304, 1496.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: Frequency Spectrum of Tx
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: TX - Spectrum
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [784, 676.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0_0
@@ -2041,7 +2190,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 1672.0]
+    coordinate: [648, 1652.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_1
@@ -2203,7 +2352,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 1700.0]
+    coordinate: [1336, 1696.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -2334,7 +2483,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [3432, 584.0]
+    coordinate: [3432, 468.0]
     rotation: 0
     state: enabled
 - name: soapy_bladerf_sink_0
@@ -2343,18 +2492,18 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: '10000'
-    center_freq: 2.4e9
+    center_freq: 1.2e9
     comment: ''
     dev_args: ''
     freq_correction: '0'
-    gain: '30'
+    gain: txgain
     samp_rate: samp_rate_blade*2
     type: fc32
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 328.0]
+    coordinate: [880, 316.0]
     rotation: 0
     state: disabled
 - name: soapy_bladerf_sink_0_0
@@ -2374,7 +2523,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 1312.0]
+    coordinate: [768, 1324.0]
     rotation: 0
     state: disabled
 - name: soapy_bladerf_source_0
@@ -2396,7 +2545,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1152, 368.0]
+    coordinate: [1200, 364.0]
     rotation: 0
     state: disabled
 - name: soapy_bladerf_source_0_0
@@ -2418,7 +2567,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1192, 1352.0]
+    coordinate: [1080, 1624.0]
     rotation: 0
     state: disabled
 - name: virtual_sink_0
@@ -2496,7 +2645,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 400.0]
+    coordinate: [600, 360.0]
     rotation: 180
     state: enabled
 
@@ -2508,7 +2657,7 @@ connections:
 - [blocks_repack_bits_bb_1_0, '0', virtual_sink_1, '0']
 - [blocks_tagged_stream_mux_0, '0', virtual_sink_0_0, '0']
 - [blocks_tagged_stream_mux_0_0, '0', digital_constellation_modulator_0_0, '0']
-- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_throttle2_0, '0', channels_channel_model_0, '0']
 - [blocks_throttle2_0_0, '0', channels_channel_model_0_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_0, '0']
 - [blocks_unpack_k_bits_bb_0_0, '0', digital_correlate_access_code_xx_ts_0_0, '0']
@@ -2520,7 +2669,8 @@ connections:
 - [digital_constellation_decoder_cb_0, '0', digital_diff_decoder_bb_0, '0']
 - [digital_constellation_decoder_cb_0_0, '0', digital_diff_decoder_bb_0_0, '0']
 - [digital_constellation_modulator_0, '0', blocks_multiply_const_vxx_0, '0']
-- [digital_constellation_modulator_0, '0', channels_channel_model_0, '0']
+- [digital_constellation_modulator_0, '0', blocks_throttle2_0, '0']
+- [digital_constellation_modulator_0, '0', qtgui_freq_sink_x_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_throttle2_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', qtgui_freq_sink_x_0_0, '0']
@@ -2531,6 +2681,7 @@ connections:
 - [digital_costas_loop_cc_0_0, '0', digital_constellation_decoder_cb_0_0, '0']
 - [digital_costas_loop_cc_0_0, '0', qtgui_const_sink_x_0_0, '0']
 - [digital_crc_append_0, out, epy_block_5, in]
+- [digital_crc_append_0, out, epy_block_5_0, in]
 - [digital_diff_decoder_bb_0, '0', digital_map_bb_0, '0']
 - [digital_diff_decoder_bb_0_0, '0', digital_map_bb_0_0, '0']
 - [digital_linear_equalizer_0_0, '0', digital_costas_loop_cc_0, '0']
@@ -2549,11 +2700,14 @@ connections:
 - [epy_block_2_0, feedback, epy_block_0_1_0, feedback]
 - [epy_block_2_0, out, digital_crc_append_0, in]
 - [epy_block_3, out, epy_block_6, in]
+- [epy_block_3, out, epy_block_6_0, in]
 - [epy_block_3_0, out, epy_block_2_0, ack_in]
 - [epy_block_4_0, ack_out, digital_protocol_formatter_async_0_0, in]
 - [epy_block_4_0, out, epy_block_3_1, in]
 - [epy_block_5, out, epy_block_0, in]
+- [epy_block_5_0, out, epy_block_0, in]
 - [epy_block_6, out, epy_block_4_0, in]
+- [epy_block_6_0, out, epy_block_4_0, in]
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '0']
 - [pdu_pdu_to_tagged_stream_0_0, '0', blocks_tagged_stream_mux_0, '1']
 - [pdu_pdu_to_tagged_stream_0_0_0, '0', blocks_tagged_stream_mux_0_0, '1']
@@ -2564,10 +2718,10 @@ connections:
 - [soapy_bladerf_source_0, '0', qtgui_freq_sink_x_1, '0']
 - [soapy_bladerf_source_0_0, '0', digital_symbol_sync_xx_0_0, '0']
 - [soapy_bladerf_source_0_0, '0', qtgui_freq_sink_x_1_0, '0']
-- [virtual_source_0, '0', blocks_throttle2_0, '0']
+- [virtual_source_0, '0', digital_constellation_modulator_0, '0']
 - [virtual_source_1, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [virtual_source_2, '0', pdu_tagged_stream_to_pdu_0_0, '0']
 
 metadata:
   file_format: 1
-  grc_version: 3.10.9.2
+  grc_version: 3.10.11.0
