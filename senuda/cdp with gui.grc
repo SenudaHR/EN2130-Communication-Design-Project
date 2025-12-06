@@ -102,7 +102,7 @@ blocks:
 - name: hdr_format
   id: variable_header_format_default
   parameters:
-    access_code: '11100001010110101110100010010011'
+    access_code: '1110000101011010111010001001001111100001010110101110100010010011'
     bps: '1'
     comment: ''
     threshold: '1'
@@ -265,7 +265,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2416, 108.0]
+    coordinate: [2368, 136.0]
     rotation: 0
     state: enabled
 - name: spr
@@ -760,7 +760,7 @@ blocks:
 - name: digital_correlate_access_code_xx_ts_0
   id: digital_correlate_access_code_xx_ts
   parameters:
-    access_code: '11100001010110101110100010010011'
+    access_code: '1110000101011010111010001001001111100001010110101110100010010011'
     affinity: ''
     alias: ''
     comment: ''
@@ -779,7 +779,7 @@ blocks:
 - name: digital_correlate_access_code_xx_ts_0_0
   id: digital_correlate_access_code_xx_ts
   parameters:
-    access_code: '11100001010110101110100010010011'
+    access_code: '1110000101011010111010001001001111100001010110101110100010010011'
     affinity: ''
     alias: ''
     comment: ''
@@ -1122,20 +1122,21 @@ blocks:
       \ // 2\n            painter.drawPixmap(x, y, scaled_pixmap)\n        super().paintEvent(event)\n\
       \n# ==========================================\n# 2. THE MAIN WINDOW (GUI LOGIC)\n\
       # ==========================================\nclass MessengerWindow(QtWidgets.QWidget):\n\
-      \    send_to_gr_signal = QtCore.pyqtSignal(str)\n    addr_selected_signal =\
-      \ QtCore.pyqtSignal(str)\n\n    def __init__(self, bg_image=\"\"):\n       \
-      \ super().__init__()\n        self.setWindowTitle(\"Messenger GUI - Multi User\"\
-      )\n        self.resize(900, 650)\n        self.bg_image_path = bg_image\n  \
-      \      \n        # --- STATE FLAGS ---\n        self.is_waiting_for_ack = False\
-      \ \n        \n        # --- DATA STRUCTURES ---\n        self.added_addresses\
-      \ = set()\n        self.selected_btn = None \n        self.current_dest_address\
-      \ = None\n        self.user_layouts = {}\n        self.contact_buttons = []\n\
-      \n        # --- STYLES ---\n        self.style_btn_normal = \"\"\"\n       \
-      \     QPushButton {\n                background-color: #34495e; color: #ecf0f1;\
-      \ border: 1px solid #2c3e50;\n                padding: 12px; border-radius:\
-      \ 6px; text-align: left;\n            }\n            QPushButton:hover { background-color:\
-      \ #4b6584; }\n            QPushButton:disabled { background-color: #2c3e50;\
-      \ color: #7f8c8d; border: 1px solid #2c3e50; }\n        \"\"\"\n        self.style_btn_selected\
+      \    # Signals to GR\n    send_to_gr_signal = QtCore.pyqtSignal(str)\n    addr_selected_signal\
+      \ = QtCore.pyqtSignal(str)\n\n    def __init__(self, bg_image=\"\"):\n     \
+      \   super().__init__()\n        self.setWindowTitle(\"BellLabz\")\n        self.resize(950,\
+      \ 700)\n        self.bg_image_path = bg_image\n        \n        # --- STATE\
+      \ FLAGS ---\n        self.is_waiting_for_ack = False \n        \n        # ---\
+      \ DATA STRUCTURES ---\n        self.added_addresses = set()\n        self.selected_btn\
+      \ = None \n        self.current_dest_address = None\n        \n        # Structure:\
+      \ { addr_int: {'page': widget, 'layout': box, 'scroll': area, 'btn': btn_obj,\
+      \ 'dot': dot_label} }\n        self.user_data = {} \n\n        # --- STYLES\
+      \ ---\n        self.style_btn_normal = \"\"\"\n            QPushButton {\n \
+      \               background-color: #34495e; color: #ecf0f1; border: 1px solid\
+      \ #2c3e50;\n                padding: 12px; border-radius: 6px; text-align: left;\n\
+      \            }\n            QPushButton:hover { background-color: #4b6584; }\n\
+      \            QPushButton:disabled { background-color: #2c3e50; color: #7f8c8d;\
+      \ border: 1px solid #2c3e50; }\n        \"\"\"\n        self.style_btn_selected\
       \ = \"\"\"\n            QPushButton {\n                background-color: #27ae60;\
       \ color: white; border: 2px solid white;\n                padding: 12px; border-radius:\
       \ 6px; text-align: left; font-weight: bold;\n            }\n            QPushButton:disabled\
@@ -1144,19 +1145,20 @@ blocks:
       \        self.main_layout.setContentsMargins(0, 0, 0, 0)\n        self.main_layout.setSpacing(0)\n\
       \        self.setLayout(self.main_layout)\n\n        self._init_sidebar()\n\
       \        self._init_right_panel()\n\n    def _init_sidebar(self):\n        self.sidebar\
-      \ = QtWidgets.QWidget()\n        self.sidebar.setFixedWidth(230)\n        self.sidebar.setStyleSheet(\"\
+      \ = QtWidgets.QWidget()\n        self.sidebar.setFixedWidth(250)\n        self.sidebar.setStyleSheet(\"\
       background-color: #2c3e50; border-right: 1px solid #1a252f;\")\n        layout\
       \ = QtWidgets.QVBoxLayout(self.sidebar)\n        layout.setSpacing(10)\n\n \
-      \       header = QtWidgets.QLabel(\"CONTACTS\")\n        header.setStyleSheet(\"\
-      color: #95a5a6; font-weight: bold; margin-top: 10px;\")\n        layout.addWidget(header)\n\
-      \n        # Input\n        input_con = QtWidgets.QHBoxLayout()\n        self.addr_input\
-      \ = QtWidgets.QLineEdit()\n        self.addr_input.setPlaceholderText(\"ID (0-255)\"\
-      )\n        self.addr_input.setStyleSheet(\"\"\"\n            QLineEdit { background:\
-      \ #ecf0f1; border: none; border-radius: 4px; padding: 8px; }\n            QLineEdit:disabled\
-      \ { background: #95a5a6; color: #555; }\n        \"\"\")\n        self.addr_input.setValidator(QtGui.QIntValidator(0,\
-      \ 255))\n        self.addr_input.returnPressed.connect(self.add_address_button)\n\
+      \       header = QtWidgets.QLabel(\"CHATS\")\n        header.setStyleSheet(\"\
+      color: #95a5a6; font-weight: bold; margin-top: 10px; font-size: 14px;\")\n \
+      \       layout.addWidget(header)\n\n        # Input\n        input_con = QtWidgets.QHBoxLayout()\n\
+      \        self.addr_input = QtWidgets.QLineEdit()\n        self.addr_input.setPlaceholderText(\"\
+      ID (0-255)\")\n        self.addr_input.setStyleSheet(\"\"\"\n            QLineEdit\
+      \ { background: #ecf0f1; border: none; border-radius: 4px; padding: 8px; color:\
+      \ black; }\n            QLineEdit:disabled { background: #95a5a6; color: #555;\
+      \ }\n        \"\"\")\n        self.addr_input.setValidator(QtGui.QIntValidator(0,\
+      \ 255))\n        self.addr_input.returnPressed.connect(self.manual_add_address)\n\
       \n        self.add_btn = QtWidgets.QPushButton(\"+\")\n        self.add_btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
-      \        self.add_btn.setFixedWidth(30)\n        self.add_btn.clicked.connect(self.add_address_button)\n\
+      \        self.add_btn.setFixedWidth(40)\n        self.add_btn.clicked.connect(self.manual_add_address)\n\
       \        self.add_btn.setStyleSheet(\"\"\"\n            QPushButton { background:\
       \ #3498db; color: white; border: none; border-radius: 4px; font-weight: bold;\
       \ }\n            QPushButton:disabled { background: #7f8c8d; }\n        \"\"\
@@ -1172,19 +1174,17 @@ blocks:
       \        right_panel = QtWidgets.QWidget()\n        layout = QtWidgets.QVBoxLayout(right_panel)\n\
       \        layout.setContentsMargins(0, 0, 0, 0)\n        layout.setSpacing(0)\n\
       \n        # Stack for Chat Pages\n        self.chat_stack = QtWidgets.QStackedWidget()\n\
-      \        welcome_page = QtWidgets.QLabel(\"Select or Add a contact to start\
-      \ messaging\")\n        welcome_page.setAlignment(QtCore.Qt.AlignCenter)\n \
-      \       welcome_page.setStyleSheet(\"background-color: #e5ddd5; color: #888;\
-      \ font-size: 18px;\")\n        self.chat_stack.addWidget(welcome_page)\n   \
-      \     layout.addWidget(self.chat_stack, stretch=1)\n\n        # Input Area (Stored\
-      \ in self.input_box_wrapper so we can hide/show it)\n        self.input_box_wrapper\
-      \ = QtWidgets.QWidget()\n        self.input_box_wrapper.setStyleSheet(\"background-color:\
-      \ #f0f0f0; border-top: 1px solid #dcdcdc;\")\n        input_box_layout = QtWidgets.QHBoxLayout(self.input_box_wrapper)\n\
-      \        input_box_layout.setContentsMargins(10, 10, 10, 10)\n        \n   \
-      \     self.msg_input = QtWidgets.QLineEdit()\n        self.msg_input.setPlaceholderText(\"\
-      Type a message...\")\n        self.msg_input.setStyleSheet(\"\"\"\n        \
-      \    QLineEdit { border-radius: 20px; padding: 10px 15px; background: white;\
-      \ border: 1px solid #ccc; font-size: 14px; }\n            QLineEdit:disabled\
+      \        welcome_page = QtWidgets.QLabel(\"Select a contact to start messaging\"\
+      )\n        welcome_page.setAlignment(QtCore.Qt.AlignCenter)\n        welcome_page.setStyleSheet(\"\
+      background-color: #e5ddd5; color: #888; font-size: 18px;\")\n        self.chat_stack.addWidget(welcome_page)\n\
+      \        layout.addWidget(self.chat_stack, stretch=1)\n\n        # Input Area\n\
+      \        self.input_box_wrapper = QtWidgets.QWidget()\n        self.input_box_wrapper.setStyleSheet(\"\
+      background-color: #f0f0f0; border-top: 1px solid #dcdcdc;\")\n        input_box_layout\
+      \ = QtWidgets.QHBoxLayout(self.input_box_wrapper)\n        input_box_layout.setContentsMargins(10,\
+      \ 10, 10, 10)\n        \n        self.msg_input = QtWidgets.QLineEdit()\n  \
+      \      self.msg_input.setPlaceholderText(\"Type a message...\")\n        self.msg_input.setStyleSheet(\"\
+      \"\"\n            QLineEdit { border-radius: 20px; padding: 10px 15px; background:\
+      \ white; border: 1px solid #ccc; font-size: 14px; }\n            QLineEdit:disabled\
       \ { background-color: #e0e0e0; color: #888; }\n        \"\"\")\n        \n \
       \       self.send_btn = QtWidgets.QPushButton(\"Send\")\n        self.send_btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
       \        self.send_btn.setStyleSheet(\"\"\"\n            QPushButton { background-color:\
@@ -1193,96 +1193,168 @@ blocks:
       \        \"\"\")\n        \n        self.msg_input.returnPressed.connect(self.on_send_click)\n\
       \        self.send_btn.clicked.connect(self.on_send_click)\n\n        input_box_layout.addWidget(self.msg_input)\n\
       \        input_box_layout.addWidget(self.send_btn)\n\n        layout.addWidget(self.input_box_wrapper)\n\
-      \        self.main_layout.addWidget(right_panel)\n        \n        # HIDE INITIALLY\n\
-      \        self.input_box_wrapper.hide()\n\n    def _create_separator(self):\n\
-      \        line = QtWidgets.QFrame()\n        line.setFrameShape(QtWidgets.QFrame.HLine)\n\
-      \        line.setStyleSheet(\"color: #3e5871;\")\n        return line\n\n  \
-      \  def add_address_button(self):\n        text = self.addr_input.text().strip()\n\
-      \        if not text: return\n        val = int(text)\n        \n        if\
-      \ val in self.added_addresses: \n            self.addr_input.clear()\n     \
-      \       return\n            \n        self.added_addresses.add(val)\n      \
-      \  \n        btn = QtWidgets.QPushButton(f\"Address: {val}\")\n        btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
-      \        btn.setStyleSheet(self.style_btn_normal)\n        btn.clicked.connect(lambda\
-      \ checked, b=btn, a=val: self.handle_address_click(b, a))\n        \n      \
-      \  self.contact_layout.addWidget(btn)\n        self.contact_buttons.append(btn)\n\
-      \        \n        new_chat_page = self._create_chat_page_widget()\n       \
-      \ self.chat_stack.addWidget(new_chat_page)\n        \n        chat_layout =\
-      \ new_chat_page.widget().layout()\n        \n        self.user_layouts[val]\
-      \ = {\n            \"page\": new_chat_page,\n            \"layout\": chat_layout,\n\
-      \            \"scroll_area\": new_chat_page\n        }\n\n        self.addr_input.clear()\n\
-      \        self.handle_address_click(btn, val)\n\n    def _create_chat_page_widget(self):\n\
-      \        scroll = WallpaperScrollArea(bg_image=self.bg_image_path)\n       \
-      \ scroll.setStyleSheet(\"border: none; background-color: #e5ddd5;\") \n    \
-      \    container = QtWidgets.QWidget()\n        layout = QtWidgets.QVBoxLayout(container)\n\
+      \        self.main_layout.addWidget(right_panel)\n        \n        self.input_box_wrapper.hide()\n\
+      \n    def _create_separator(self):\n        line = QtWidgets.QFrame()\n    \
+      \    line.setFrameShape(QtWidgets.QFrame.HLine)\n        line.setStyleSheet(\"\
+      color: #3e5871;\")\n        return line\n\n    def manual_add_address(self):\n\
+      \        text = self.addr_input.text().strip()\n        if not text: return\n\
+      \        try:\n            val = int(text)\n            self.ensure_user_exists(val)\n\
+      \            # Simulate click to select logic\n            btn = self.user_data[val]['btn']\n\
+      \            self.handle_address_click(btn, val)\n            self.addr_input.clear()\n\
+      \        except ValueError:\n            pass\n\n    def ensure_user_exists(self,\
+      \ address_val):\n        \"\"\"Creates user context if it doesn't exist. Returns\
+      \ the user dict.\"\"\"\n        if address_val in self.user_data:\n        \
+      \    return self.user_data[address_val]\n\n        self.added_addresses.add(address_val)\n\
+      \n        # 1. Create Sidebar Button Widget\n        btn_widget = QtWidgets.QWidget()\n\
+      \        btn_layout = QtWidgets.QHBoxLayout(btn_widget)\n        btn_layout.setContentsMargins(0,0,0,0)\n\
+      \        \n        # The actual clickable button\n        btn = QtWidgets.QPushButton(f\"\
+      Node {address_val}\")\n        btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
+      \        btn.setStyleSheet(self.style_btn_normal)\n        btn.setFixedHeight(50)\n\
+      \        \n        # Unread Dot (Overlay logic via layout)\n        # To make\
+      \ layout simple, we'll just put the dot inside the button text or next to it?\n\
+      \        # Let's use a layout approach:\n        \n        dot = QtWidgets.QLabel(\"\
+      \u25CF\") \n        dot.setStyleSheet(\"color: #f1c40f; font-size: 16px; margin-right:\
+      \ 5px;\") # Yellow dot\n        dot.setVisible(False)\n\n        # We need a\
+      \ custom widget click handling or just overlay the button\n        # Simplification:\
+      \ Connect button click. The dot is separate but we track it.\n        # Let's\
+      \ wrap btn and dot in a container? No, let's keep it simple.\n        # We will\
+      \ add dot to the HBox inside the sidebar layout item?\n        \n        # Better\
+      \ approach: Subclass QPushButton or just add dot next to it\n        container_widget\
+      \ = QtWidgets.QWidget()\n        cw_layout = QtWidgets.QHBoxLayout(container_widget)\n\
+      \        cw_layout.setContentsMargins(0,0,0,0)\n        cw_layout.setSpacing(0)\n\
+      \        \n        # Helper logic to make the whole row clickable requires event\
+      \ filter, \n        # but let's just make the button fill the space and manage\
+      \ the dot internally?\n        # Let's stick to the previous button style but\
+      \ change text color if unread?\n        # Or just append a unicode dot to text?\n\
+      \        \n        # Going with the clean layout approach:\n        # [ Button\
+      \ (Stretches) ] [ Dot (Fixed) ]\n        \n        btn.clicked.connect(lambda\
+      \ checked, b=btn, a=address_val: self.handle_address_click(b, a))\n        \n\
+      \        # Add to sidebar\n        # We need to modify style to allow dot visibility.\
+      \ \n        # Actually, let's put the dot IN the button text for simplicity\
+      \ given the constraints\n        # No, let's do it right.\n        \n      \
+      \  self.contact_layout.addWidget(btn)\n\n        # 2. Create Chat Page\n   \
+      \     new_chat_page = self._create_chat_page_widget()\n        self.chat_stack.addWidget(new_chat_page)\n\
+      \        \n        chat_layout = new_chat_page.widget().layout()\n        \n\
+      \        # Store Data\n        self.user_data[address_val] = {\n           \
+      \ \"page\": new_chat_page,\n            \"layout\": chat_layout,\n         \
+      \   \"scroll_area\": new_chat_page,\n            \"btn\": btn,\n           \
+      \ \"has_unread\": False\n        }\n        \n        return self.user_data[address_val]\n\
+      \n    def _create_chat_page_widget(self):\n        scroll = WallpaperScrollArea(bg_image=self.bg_image_path)\n\
+      \        scroll.setStyleSheet(\"border: none; background-color: #e5ddd5;\")\
+      \ \n        container = QtWidgets.QWidget()\n        layout = QtWidgets.QVBoxLayout(container)\n\
       \        layout.setAlignment(QtCore.Qt.AlignTop)\n        scroll.setWidget(container)\n\
       \        container.setStyleSheet(\"background: transparent;\")\n        return\
       \ scroll\n\n    def handle_address_click(self, btn_obj, address_val):\n    \
       \    if self.is_waiting_for_ack:\n            return\n\n        # Show input\
-      \ bar when an address is selected\n        if self.input_box_wrapper.isHidden():\n\
-      \            self.input_box_wrapper.show()\n\n        if self.selected_btn and\
-      \ self.selected_btn != btn_obj:\n            self.selected_btn.setStyleSheet(self.style_btn_normal)\n\
-      \        btn_obj.setStyleSheet(self.style_btn_selected)\n        self.selected_btn\
-      \ = btn_obj\n        \n        self.current_dest_address = address_val\n   \
-      \     \n        if address_val in self.user_layouts:\n            target_page\
-      \ = self.user_layouts[address_val][\"page\"]\n            self.chat_stack.setCurrentWidget(target_page)\n\
-      \n        self.addr_selected_signal.emit(str(address_val))\n\n    def on_send_click(self):\n\
-      \        if self.is_waiting_for_ack:\n            return\n\n        text = self.msg_input.text().strip()\n\
-      \        if not text: return\n        \n        if self.current_dest_address\
-      \ is None:\n            return\n\n        self._set_ui_busy_state(True)\n\n\
-      \        user_data = self.user_layouts[self.current_dest_address]\n        self._create_bubble(text,\
-      \ user_data[\"layout\"], user_data[\"scroll_area\"])\n        \n        self.send_to_gr_signal.emit(text)\n\
-      \        self.msg_input.clear()\n\n    def _set_ui_busy_state(self, is_busy):\n\
-      \        \"\"\"Disables/Enables INPUT, SEND BTN, SIDEBAR, and ADD BTN\"\"\"\n\
-      \        self.is_waiting_for_ack = is_busy\n        \n        self.msg_input.setEnabled(not\
-      \ is_busy)\n        self.send_btn.setEnabled(not is_busy)\n        self.addr_input.setEnabled(not\
-      \ is_busy)\n        self.add_btn.setEnabled(not is_busy)\n\n        for btn\
-      \ in self.contact_buttons:\n            btn.setEnabled(not is_busy)\n      \
-      \  \n        if is_busy:\n            self.send_btn.setText(\"Wait...\")\n \
-      \       else:\n            self.send_btn.setText(\"Send\")\n            self.msg_input.setFocus()\n\
-      \n    def _create_bubble(self, text, layout, scroll_area):\n        container\
-      \ = QtWidgets.QWidget()\n        vbox = QtWidgets.QVBoxLayout(container)\n \
-      \       vbox.setContentsMargins(0,0,0,0)\n\n        h_scroll = QtWidgets.QScrollArea()\n\
+      \ bar\n        if self.input_box_wrapper.isHidden():\n            self.input_box_wrapper.show()\n\
+      \n        # Update Button Styles\n        if self.selected_btn and self.selected_btn\
+      \ != btn_obj:\n            self.selected_btn.setStyleSheet(self.style_btn_normal)\n\
+      \        \n        btn_obj.setStyleSheet(self.style_btn_selected)\n        self.selected_btn\
+      \ = btn_obj\n        \n        # Clear Unread\n        if self.user_data[address_val][\"\
+      has_unread\"]:\n            self.user_data[address_val][\"has_unread\"] = False\n\
+      \            btn_obj.setText(f\"Node {address_val}\") # Remove dot from text\n\
+      \n        self.current_dest_address = address_val\n        \n        # Switch\
+      \ Stack\n        target_page = self.user_data[address_val][\"page\"]\n     \
+      \   self.chat_stack.setCurrentWidget(target_page)\n\n        # Emit Address\
+      \ Change\n        self.addr_selected_signal.emit(str(address_val))\n\n    def\
+      \ on_send_click(self):\n        if self.is_waiting_for_ack:\n            return\n\
+      \n        text = self.msg_input.text().strip()\n        if not text: return\n\
+      \        \n        if self.current_dest_address is None:\n            return\n\
+      \n        self._set_ui_busy_state(True)\n\n        user_entry = self.user_data[self.current_dest_address]\n\
+      \        \n        # Add SENT Bubble (Right side)\n        self._add_message_bubble(text,\
+      \ user_entry[\"layout\"], user_entry[\"scroll_area\"], is_sender=True)\n   \
+      \     \n        self.send_to_gr_signal.emit(text)\n        self.msg_input.clear()\n\
+      \n    @QtCore.pyqtSlot(int, str)\n    def handle_received_msg(self, src_addr,\
+      \ text):\n        \"\"\"Called when a PDU arrives from GNU Radio\"\"\"\n   \
+      \     \n        # 1. Ensure User Exists\n        user_entry = self.ensure_user_exists(src_addr)\n\
+      \        \n        # 2. Add RECEIVED Bubble (Left Side)\n        self._add_message_bubble(text,\
+      \ user_entry[\"layout\"], user_entry[\"scroll_area\"], is_sender=False)\n  \
+      \      \n        # 3. Handle Unread Logic\n        if self.current_dest_address\
+      \ != src_addr:\n            user_entry[\"has_unread\"] = True\n            #\
+      \ Simple visual indicator: Append dot to button text\n            btn = user_entry[\"\
+      btn\"]\n            if \"\u25CF\" not in btn.text():\n                btn.setText(f\"\
+      Node {src_addr} \u25CF\")\n\n    def _add_message_bubble(self, text, layout,\
+      \ scroll_area, is_sender):\n        container = QtWidgets.QWidget()\n      \
+      \  vbox = QtWidgets.QVBoxLayout(container)\n        vbox.setContentsMargins(0,0,0,0)\n\
+      \n        # Scroll for long text in bubble\n        h_scroll = QtWidgets.QScrollArea()\n\
       \        h_scroll.setWidgetResizable(True)\n        h_scroll.setFixedHeight(60)\n\
       \        h_scroll.setStyleSheet(\"background: transparent; border: none;\")\n\
       \        h_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)\n\
       \        h_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)\n\
-      \n        lbl = QtWidgets.QLabel(text)\n        lbl.setStyleSheet(\"background-color:\
-      \ #dcf8c6; padding: 8px; border-radius: 10px; font-size: 16px;\")\n        h_scroll.setWidget(lbl)\n\
-      \        h_scroll.setMinimumWidth(100)\n        h_scroll.setMaximumWidth(450)\n\
-      \        lbl.adjustSize()\n        h_scroll.setFixedHeight(lbl.height() + 25)\n\
-      \n        ts = QtWidgets.QLabel(\"Sending...\")\n        ts.setStyleSheet(\"\
-      color: grey; font-size: 10px;\")\n        ts.setAlignment(QtCore.Qt.AlignRight)\n\
-      \        \n        vbox.addWidget(h_scroll)\n        vbox.addWidget(ts)\n\n\
-      \        row = QtWidgets.QHBoxLayout()\n        row.addStretch()\n        row.addWidget(container)\n\
-      \        \n        layout.addLayout(row)\n        \n        self._last_message_timestamp\
-      \ = ts\n        QtCore.QTimer.singleShot(50, lambda: scroll_area.verticalScrollBar().setValue(scroll_area.verticalScrollBar().maximum()))\n\
+      \n        lbl = QtWidgets.QLabel(text)\n        \n        if is_sender:\n  \
+      \          # Green, Right Aligned\n            lbl.setStyleSheet(\"background-color:\
+      \ #dcf8c6; padding: 8px; border-radius: 10px; font-size: 16px; color: black;\"\
+      )\n            align = QtCore.Qt.AlignRight\n        else:\n            # White,\
+      \ Left Aligned\n            lbl.setStyleSheet(\"background-color: #ffffff; padding:\
+      \ 8px; border-radius: 10px; font-size: 16px; color: black;\")\n            align\
+      \ = QtCore.Qt.AlignLeft\n\n        h_scroll.setWidget(lbl)\n        h_scroll.setMinimumWidth(100)\n\
+      \        h_scroll.setMaximumWidth(450)\n        lbl.adjustSize()\n        h_scroll.setFixedHeight(lbl.height()\
+      \ + 25)\n\n        # Timestamp\n        ts_text = datetime.now().strftime(\"\
+      %H:%M\")\n        ts = QtWidgets.QLabel(ts_text)\n        ts.setStyleSheet(\"\
+      color: grey; font-size: 10px;\")\n        ts.setAlignment(QtCore.Qt.AlignRight\
+      \ if is_sender else QtCore.Qt.AlignLeft)\n        \n        vbox.addWidget(h_scroll)\n\
+      \        vbox.addWidget(ts)\n\n        # Horizontal Row Alignment\n        row\
+      \ = QtWidgets.QHBoxLayout()\n        if is_sender:\n            row.addStretch()\n\
+      \            row.addWidget(container)\n            self._last_message_timestamp\
+      \ = ts # Track only my sent messages for ACK\n        else:\n            row.addWidget(container)\n\
+      \            row.addStretch()\n        \n        layout.addLayout(row)\n   \
+      \     \n        # Scroll to bottom\n        QtCore.QTimer.singleShot(50, lambda:\
+      \ scroll_area.verticalScrollBar().setValue(scroll_area.verticalScrollBar().maximum()))\n\
+      \n    def _set_ui_busy_state(self, is_busy):\n        \"\"\"Disables/Enables\
+      \ INPUT, SEND BTN, SIDEBAR, and ADD BTN\"\"\"\n        self.is_waiting_for_ack\
+      \ = is_busy\n        \n        self.msg_input.setEnabled(not is_busy)\n    \
+      \    self.send_btn.setEnabled(not is_busy)\n        self.addr_input.setEnabled(not\
+      \ is_busy)\n        self.add_btn.setEnabled(not is_busy)\n\n        for addr,\
+      \ data in self.user_data.items():\n            data['btn'].setEnabled(not is_busy)\n\
+      \        \n        if is_busy:\n            self.send_btn.setText(\"Wait...\"\
+      )\n        else:\n            self.send_btn.setText(\"Send\")\n            self.msg_input.setFocus()\n\
       \n    @QtCore.pyqtSlot(str)\n    def handle_feedback(self, feedback):\n    \
-      \    if self._last_message_timestamp:\n            if feedback == \"END_ACK_RECEIVED\"\
-      :\n                self._last_message_timestamp.setText(datetime.now().strftime(\"\
-      %H:%M\") + \" \u2713\u2713\")\n                self._last_message_timestamp.setStyleSheet(\"\
-      color: #34B7F1; font-weight: bold;\")\n            elif feedback == \"RETRY_LIMIT_EXCEEDED\"\
-      :\n                self._last_message_timestamp.setText(\"Failed \u274C\")\n\
-      \                self._last_message_timestamp.setStyleSheet(\"color: red;\"\
-      )\n        \n        self._set_ui_busy_state(False)\n\n# ==========================================\n\
-      # 3. GNU RADIO BLOCK\n# ==========================================\nclass GuiSignaler(QtCore.QObject):\n\
-      \    feedback_signal = QtCore.pyqtSignal(str)\n\nclass messenger_gui(gr.basic_block):\n\
-      \    def __init__(self, bg_image=\"\"):\n        gr.basic_block.__init__(\n\
+      \    # ACK logic only applies to the last SENT message\n        if hasattr(self,\
+      \ '_last_message_timestamp') and self._last_message_timestamp:\n           \
+      \ if feedback == \"END_ACK_RECEIVED\":\n                current_text = self._last_message_timestamp.text()\n\
+      \                if \"\u2713\" not in current_text:\n                    self._last_message_timestamp.setText(current_text\
+      \ + \" \u2713\u2713\")\n                    self._last_message_timestamp.setStyleSheet(\"\
+      color: #34B7F1; font-weight: bold; font-size: 10px;\")\n            elif feedback\
+      \ == \"RETRY_LIMIT_EXCEEDED\":\n                self._last_message_timestamp.setText(\"\
+      Failed \u274C\")\n                self._last_message_timestamp.setStyleSheet(\"\
+      color: red; font-size: 10px;\")\n        \n        self._set_ui_busy_state(False)\n\
+      \n# ==========================================\n# 3. GNU RADIO BLOCK\n# ==========================================\n\
+      class GuiSignaler(QtCore.QObject):\n    feedback_signal = QtCore.pyqtSignal(str)\n\
+      \    receive_signal = QtCore.pyqtSignal(int, str) # addr, text\n\nclass messenger_gui(gr.basic_block):\n\
+      \    \"\"\"\n    Inputs: \n       'in' (PDUs from receiver)\n       'feedback'\
+      \ (ACK/NACK)\n    Outputs: \n       'out' (payload), \n       'dest_addr' (selected\
+      \ address)\n    \"\"\"\n    def __init__(self, bg_image=\"\"):\n        gr.basic_block.__init__(\n\
       \            self,\n            name=\"Messenger GUI\",\n            in_sig=None,\n\
-      \            out_sig=None,\n        )\n\n        self.message_port_register_out(pmt.intern(\"\
+      \            out_sig=None,\n        )\n\n        # Registers\n        self.message_port_register_out(pmt.intern(\"\
       out\"))\n        self.message_port_register_out(pmt.intern(\"dest_addr\"))\n\
-      \        self.message_port_register_in(pmt.intern(\"feedback\"))\n        self.set_msg_handler(pmt.intern(\"\
-      feedback\"), self._process_feedback_msg)\n\n        self.qapp = QtWidgets.QApplication.instance()\n\
-      \        if not self.qapp:\n            self.qapp = QtWidgets.QApplication(sys.argv)\n\
-      \n        self.signaler = GuiSignaler()\n        self.gui_window = MessengerWindow(bg_image=bg_image)\n\
-      \        \n        self.signaler.feedback_signal.connect(self.gui_window.handle_feedback)\n\
-      \        self.gui_window.send_to_gr_signal.connect(self._send_payload)\n   \
-      \     self.gui_window.addr_selected_signal.connect(self._send_dest_addr)\n\n\
-      \        self.gui_window.show()\n\n    def _process_feedback_msg(self, msg):\n\
+      \        \n        self.message_port_register_in(pmt.intern(\"in\"))      #\
+      \ Incoming PDU\n        self.message_port_register_in(pmt.intern(\"feedback\"\
+      )) # ACKs\n\n        self.set_msg_handler(pmt.intern(\"feedback\"), self._process_feedback_msg)\n\
+      \        self.set_msg_handler(pmt.intern(\"in\"), self._process_incoming_pdu)\n\
+      \n        self.qapp = QtWidgets.QApplication.instance()\n        if not self.qapp:\n\
+      \            self.qapp = QtWidgets.QApplication(sys.argv)\n\n        self.signaler\
+      \ = GuiSignaler()\n        self.gui_window = MessengerWindow(bg_image=bg_image)\n\
+      \        \n        # Connections\n        self.signaler.feedback_signal.connect(self.gui_window.handle_feedback)\n\
+      \        self.signaler.receive_signal.connect(self.gui_window.handle_received_msg)\n\
+      \        \n        self.gui_window.send_to_gr_signal.connect(self._send_payload)\n\
+      \        self.gui_window.addr_selected_signal.connect(self._send_dest_addr)\n\
+      \n        self.gui_window.show()\n\n    def _process_feedback_msg(self, msg):\n\
       \        try:\n            if pmt.is_symbol(msg):\n                s = pmt.symbol_to_string(msg)\n\
       \                self.signaler.feedback_signal.emit(s)\n        except Exception:\n\
-      \            pass\n\n    def _send_payload(self, text_msg):\n        self.message_port_pub(pmt.intern(\"\
-      out\"), pmt.string_to_symbol(text_msg))\n\n    def _send_dest_addr(self, addr_str):\n\
-      \        self.message_port_pub(pmt.intern(\"dest_addr\"), pmt.string_to_symbol(addr_str))\n"
+      \            pass\n\n    def _process_incoming_pdu(self, msg):\n        \"\"\
+      \"\n        Expects PDU: Pair(Meta, u8vector).\n        Byte 0 = Sender Address.\n\
+      \        Bytes 1+ = Text.\n        \"\"\"\n        try:\n            if not\
+      \ pmt.is_pair(msg): return\n            vec = pmt.cdr(msg)\n            if not\
+      \ pmt.is_u8vector(vec): return\n            \n            data = bytearray(pmt.u8vector_elements(vec))\n\
+      \            if len(data) < 1: return\n            \n            sender_addr\
+      \ = data[0] # Byte 0\n            payload = data[1:]    # Remaining bytes\n\
+      \            \n            text = payload.decode(\"utf-8\", errors=\"ignore\"\
+      )\n            \n            # Emit to GUI\n            self.signaler.receive_signal.emit(sender_addr,\
+      \ text)\n            \n        except Exception as e:\n            print(f\"\
+      Error processing input PDU: {e}\")\n\n    def _send_payload(self, text_msg):\n\
+      \        self.message_port_pub(pmt.intern(\"out\"), pmt.string_to_symbol(text_msg))\n\
+      \n    def _send_dest_addr(self, addr_str):\n        self.message_port_pub(pmt.intern(\"\
+      dest_addr\"), pmt.string_to_symbol(addr_str))\n"
     affinity: ''
     alias: ''
     bg_image: '''/home/vboxuser/Downloads/tx.jpg'''
@@ -1290,12 +1362,15 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('Messenger GUI', 'messenger_gui', [('bg_image', "''")], [('feedback',
-      'message', 1)], [('dest_addr', 'message', 1), ('out', 'message', 1)], '', [])
+    _io_cache: '(''Messenger GUI'', ''messenger_gui'', [(''bg_image'', "''''")], [(''feedback'',
+      ''message'', 1), (''in'', ''message'', 1)], [(''dest_addr'', ''message'', 1),
+      (''out'', ''message'', 1)], "\nInputs: \n   ''in'' (PDUs from receiver)\n   ''feedback''
+      (ACK/NACK)\nOutputs: \n   ''out'' (payload), \n   ''dest_addr'' (selected address)\n",
+      [])'
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [224, 288.0]
+    coordinate: [264, 312.0]
     rotation: 180
     state: enabled
 - name: epy_block_2_0_0
@@ -1403,7 +1478,7 @@ blocks:
       \ + 1\n                        self._attempts = 0\n                        break\n\
       \n        except Exception as e:\n            print(f\"[pdu_text_gui] Error\
       \ processing ACK: {e}\")\n\n"
-    address: '21'
+    address: '50'
     affinity: ''
     alias: ''
     comment: ''
@@ -1453,7 +1528,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    my_address: '21'
+    my_address: '10'
   states:
     _io_cache: ('address_check', 'address_check', [('my_address', '1')], [('in', 'message',
       1)], [('out', 'message', 1)], '\nBlock to check address and strip it if matches\n',
@@ -1486,7 +1561,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    my_address: '21'
+    my_address: '50'
   states:
     _io_cache: ('address_check', 'address_check', [('my_address', '1')], [('in', 'message',
       1)], [('out', 'message', 1)], '\nBlock to check address and strip it if matches\n',
@@ -1620,7 +1695,7 @@ blocks:
     bus_structure: null
     coordinate: [856, 1112.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_4_0
   id: epy_block
   parameters:
@@ -2705,6 +2780,19 @@ blocks:
     coordinate: [280, 1856.0]
     rotation: 180
     state: enabled
+- name: virtual_sink_2
+  id: virtual_sink
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: gui
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [760, 1160.0]
+    rotation: 0
+    state: enabled
 - name: virtual_source_0
   id: virtual_source
   parameters:
@@ -2742,6 +2830,19 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [600, 360.0]
+    rotation: 180
+    state: enabled
+- name: virtual_source_3
+  id: virtual_source
+  parameters:
+    alias: ''
+    comment: ''
+    stream_id: gui
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [504, 280.0]
     rotation: 180
     state: enabled
 
@@ -2803,6 +2904,7 @@ connections:
 - [epy_block_3_0, out, epy_block_2_0_0, ack_in]
 - [epy_block_4_0, ack_out, digital_protocol_formatter_async_0_0, in]
 - [epy_block_4_0, out, epy_block_3_1, in]
+- [epy_block_4_0, out, virtual_sink_2, '0']
 - [epy_block_6, out, epy_block_4_0, in]
 - [epy_block_6_0, out, epy_block_4_0, in]
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '0']
@@ -2818,6 +2920,7 @@ connections:
 - [virtual_source_0, '0', digital_constellation_modulator_0, '0']
 - [virtual_source_1, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [virtual_source_2, '0', pdu_tagged_stream_to_pdu_0_0, '0']
+- [virtual_source_3, '0', epy_block_0_1_0, in]
 
 metadata:
   file_format: 1
