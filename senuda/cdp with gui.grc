@@ -376,7 +376,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 44.0]
+    coordinate: [8, 16.0]
     rotation: 0
     state: enabled
 - name: MTU
@@ -851,7 +851,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 68.0]
+    coordinate: [528, 80.0]
     rotation: 0
     state: enabled
 - name: digital_diff_decoder_bb_0
@@ -1055,27 +1055,47 @@ blocks:
   parameters:
     _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport pmt\n\
       from gnuradio import gr\n\nclass address_add(gr.basic_block):\n    \"\"\"\n\
-      \    Block to prepend an address byte to a PDU payload\n    \"\"\"\n    def\
-      \ __init__(self, address=0x01):\n        gr.basic_block.__init__(\n        \
-      \    self,\n            name=\"address_add\",\n            in_sig=[],\n    \
-      \        out_sig=[]\n        )\n        self.address = address\n        self.message_port_register_in(pmt.intern(\"\
-      in\"))\n        self.message_port_register_out(pmt.intern(\"out\"))\n      \
-      \  self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n    def handle_msg(self,\
-      \ msg):\n        if pmt.is_pair(msg):\n            meta = pmt.car(msg)\n   \
-      \         data = bytearray(pmt.u8vector_elements(pmt.cdr(msg)))\n          \
-      \  # prepend address\n            data.insert(0, self.address)\n           \
-      \ out_msg = pmt.cons(meta, pmt.init_u8vector(len(data), data))\n           \
-      \ self.message_port_pub(pmt.intern(\"out\"), out_msg)\n"
-    address: '21'
+      \    Block to prepend a dynamic address byte to a PDU payload.\n    \n    This\
+      \ block has no GRC parameters. It relies entirely on the 'addr_in' \n    port\
+      \ to set the destination address.\n    \"\"\"\n    def __init__(self):\n   \
+      \     gr.basic_block.__init__(\n            self,\n            name=\"address_add\"\
+      ,\n            in_sig=[],\n            out_sig=[]\n        )\n        # Default\
+      \ internal state (will be overwritten by GUI immediately)\n        self.address\
+      \ = 0x00\n        \n        # Port for the Text Payload\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        # Port for the Address Update\n        self.message_port_register_in(pmt.intern(\"\
+      addr_in\"))\n        \n        # Output Port\n        self.message_port_register_out(pmt.intern(\"\
+      out\"))\n        \n        # Register handlers\n        self.set_msg_handler(pmt.intern(\"\
+      in\"), self.handle_msg)\n        self.set_msg_handler(pmt.intern(\"addr_in\"\
+      ), self.handle_address_update)\n\n    def handle_address_update(self, msg):\n\
+      \        \"\"\"\n        Receives the address from the GUI (Symbol or Int) \n\
+      \        and updates the internal state.\n        \"\"\"\n        try:\n   \
+      \         # GUI sends address as a String Symbol (e.g. \"255\")\n          \
+      \  if pmt.is_symbol(msg):\n                str_val = pmt.symbol_to_string(msg)\n\
+      \                self.address = int(str_val)\n            \n            # If\
+      \ standard int/long is sent\n            elif pmt.is_integer(msg) or pmt.is_uint64(msg):\n\
+      \                self.address = pmt.to_long(msg)\n                \n       \
+      \     # print(f\"[address_add] Active Address set to: {self.address}\")\n  \
+      \              \n        except ValueError:\n            pass\n\n    def handle_msg(self,\
+      \ msg):\n        \"\"\"\n        Prepend the currently active 'self.address'\
+      \ to the message.\n        \"\"\"\n        meta = pmt.make_dict()\n        payload\
+      \ = bytearray()\n\n        # 1. Parse Input\n        if pmt.is_pair(msg):\n\
+      \            meta = pmt.car(msg)\n            payload = bytearray(pmt.u8vector_elements(pmt.cdr(msg)))\n\
+      \        elif pmt.is_symbol(msg):\n            text_data = pmt.symbol_to_string(msg)\n\
+      \            payload = bytearray(text_data, 'utf-8')\n        else:\n      \
+      \      return\n\n        # 2. Prepend Address\n        safe_addr = self.address\
+      \ & 0xFF\n        payload.insert(0, safe_addr)\n\n        # 3. Publish\n   \
+      \     out_msg = pmt.cons(meta, pmt.init_u8vector(len(payload), payload))\n \
+      \       self.message_port_pub(pmt.intern(\"out\"), out_msg)\n"
     affinity: ''
     alias: ''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('address_add', 'address_add', [('address', '1')], [('in', 'message',
-      1)], [('out', 'message', 1)], '\nBlock to prepend an address byte to a PDU payload\n',
-      ['address'])
+    _io_cache: ('address_add', 'address_add', [], [('addr_in', 'message', 1), ('in',
+      'message', 1)], [('out', 'message', 1)], "\nBlock to prepend a dynamic address
+      byte to a PDU payload.\n\nThis block has no GRC parameters. It relies entirely
+      on the 'addr_in' \nport to set the destination address.\n", [])
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1085,110 +1105,184 @@ blocks:
 - name: epy_block_0_1_0
   id: epy_block
   parameters:
-    _source_code: "\n#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nfrom gnuradio\
+    _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nfrom gnuradio\
       \ import gr\nfrom PyQt5 import QtWidgets, QtCore, QtGui\nimport sys\nimport\
-      \ pmt\nimport time\nfrom datetime import datetime  # for timestamps\n\nclass\
-      \ WallpaperScrollArea(QtWidgets.QScrollArea):\n    def __init__(self, bg_image=\"\
+      \ pmt\nfrom datetime import datetime\n\n# ==========================================\n\
+      # 1. CUSTOM UI COMPONENTS\n# ==========================================\n\n\
+      class WallpaperScrollArea(QtWidgets.QScrollArea):\n    def __init__(self, bg_image=\"\
       \", parent=None):\n        super().__init__(parent)\n        self.setWidgetResizable(True)\n\
       \        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)\n \
       \       self.bg_pixmap = QtGui.QPixmap(bg_image) if bg_image else None\n\n \
-      \   def paintEvent(self, event):\n        if self.bg_pixmap:\n            painter\
-      \ = QtGui.QPainter(self.viewport())\n            painter.drawPixmap(self.viewport().rect(),\
-      \ self.bg_pixmap)\n        super().paintEvent(event)\n\n\nclass messenger_gui(gr.basic_block):\n\
-      \    \"\"\"\n    WhatsApp-style Messenger GUI with dynamic bubble resizing,\n\
-      \    horizontal scroll for long messages, timestamp update on delivery,\n  \
-      \  and failure indication if retry limit is exceeded.\n    \"\"\"\n\n    def\
-      \ __init__(self, bg_image=\"\"):\n        gr.basic_block.__init__(\n       \
-      \     self,\n            name=\"Messenger GUI\",\n            in_sig=None,\n\
-      \            out_sig=None,\n        )\n\n        # Message ports\n        self.message_port_register_out(pmt.intern(\"\
-      out\"))\n        self.message_port_register_in(pmt.intern(\"feedback\"))\n \
-      \       self.set_msg_handler(pmt.intern(\"feedback\"), self._process_feedback)\n\
-      \n        # Qt Application\n        self.app = QtWidgets.QApplication.instance()\n\
-      \        if self.app is None:\n            self.app = QtWidgets.QApplication(sys.argv)\n\
-      \n        self.qt_widget = QtWidgets.QWidget()\n        self.qt_widget.setWindowTitle(\"\
-      Messenger GUI\")\n        self.qt_widget.resize(600, 500)\n\n        main_layout\
-      \ = QtWidgets.QVBoxLayout()\n        main_layout.setContentsMargins(0, 0, 0,\
-      \ 0)\n        main_layout.setSpacing(0)\n        self.qt_widget.setLayout(main_layout)\n\
-      \n        # Scroll area with background\n        self.scroll_area = WallpaperScrollArea(bg_image=bg_image)\n\
-      \        self.scroll_area.setStyleSheet(\"border: none;\")\n        self.scroll_area.setWidgetResizable(True)\n\
-      \        main_layout.addWidget(self.scroll_area, stretch=1)\n\n        # Chat\
-      \ container\n        self.chat_container = QtWidgets.QWidget()\n        self.chat_layout\
-      \ = QtWidgets.QVBoxLayout()\n        self.chat_layout.setAlignment(QtCore.Qt.AlignTop)\n\
-      \        self.chat_layout.setSpacing(10)\n        self.chat_container.setLayout(self.chat_layout)\n\
-      \        self.chat_container.setStyleSheet(\"background: transparent;\")\n \
-      \       self.scroll_area.setWidget(self.chat_container)\n\n        # Input area\n\
-      \        input_layout = QtWidgets.QHBoxLayout()\n        self.input_box = QtWidgets.QLineEdit()\n\
-      \        self.input_box.setPlaceholderText(\"Type a message...\")\n        self.input_box.setStyleSheet(\"\
-      \"\"\n            QLineEdit {\n                border-radius: 15px;\n      \
-      \          padding: 12px;\n                background-color: rgba(255,255,255,230);\n\
-      \                font-size: 32px;\n            }\n        \"\"\")\n        self.send_button\
-      \ = QtWidgets.QPushButton(\"Send\")\n        self.send_button.setStyleSheet(\"\
-      \"\"\n            QPushButton {\n                background-color: #4CAF50;\n\
-      \                color: white;\n                border-radius: 15px;\n     \
-      \           padding: 12px 24px;\n                font-weight: bold;\n      \
-      \          font-size: 32px;\n            }\n            QPushButton:hover {\n\
-      \                background-color: #45a049;\n            }\n        \"\"\")\n\
-      \        input_layout.addWidget(self.input_box)\n        input_layout.addWidget(self.send_button)\n\
-      \        main_layout.addLayout(input_layout)\n\n        # Connect signals\n\
-      \        self.send_button.clicked.connect(self.send_message)\n        self.input_box.returnPressed.connect(self.send_message)\n\
-      \n        self._last_message_timestamp = None\n        self.qt_widget.show()\n\
-      \n    def send_message(self):\n        text = self.input_box.text().strip()\n\
-      \        if not text:\n            return\n\n        # Send message via GNU\
-      \ Radio port\n        self.message_port_pub(pmt.intern(\"out\"), pmt.string_to_symbol(text))\n\
-      \n        # Scrollable bubble container\n        scroll = QtWidgets.QScrollArea()\n\
-      \        scroll.setWidgetResizable(True)\n        scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)\n\
-      \        scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)\n \
-      \       scroll.setStyleSheet(\"border: none; background: transparent;\")\n\n\
-      \        # Message bubble\n        bubble = QtWidgets.QLabel(text)\n       \
-      \ bubble.setWordWrap(False)  # Disable wrapping\n        bubble.setStyleSheet(\"\
-      \"\"\n            QLabel {\n                background-color: qlineargradient(x1:0,\
-      \ y1:0, x2:1, y2:1,\n                    stop:0 #4CAF50, stop:1 #66BB6A);\n\
-      \                color: white;\n                border-radius: 15px;\n     \
-      \           padding: 10px 15px;\n                font-size: 32px;\n        \
-      \    }\n        \"\"\")\n\n        # Shadow effect\n        effect = QtWidgets.QGraphicsDropShadowEffect()\n\
-      \        effect.setBlurRadius(6)\n        effect.setXOffset(2)\n        effect.setYOffset(2)\n\
-      \        effect.setColor(QtGui.QColor(0, 0, 0, 100))\n        bubble.setGraphicsEffect(effect)\n\
-      \n        scroll.setWidget(bubble)\n        scroll.setMinimumWidth(200)\n  \
-      \      scroll.setMaximumWidth(550)  # Max visible width of bubble\n        bubble.adjustSize()\n\
-      \        scroll.adjustSize()\n\n        # Timestamp label as small blue pill\
-      \ initially\n        timestamp = QtWidgets.QLabel(\"Sending...\")\n        timestamp.setStyleSheet(\"\
-      \"\"\n            QLabel {\n                background-color: #2196F3;  /* blue\
-      \ background */\n                color: white;\n                font-size: 18px;\n\
-      \                border-radius: 8px;\n                padding: 2px 6px;\n  \
-      \          }\n        \"\"\")\n        timestamp.setAlignment(QtCore.Qt.AlignRight)\n\
-      \        timestamp.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)\n\
-      \n        # Container for bubble + timestamp\n        container = QtWidgets.QWidget()\n\
-      \        vbox = QtWidgets.QVBoxLayout()\n        vbox.setContentsMargins(0,\
-      \ 0, 0, 0)\n        vbox.setSpacing(2)\n        vbox.addWidget(scroll)\n   \
-      \     vbox.addWidget(timestamp, alignment=QtCore.Qt.AlignRight)\n        container.setLayout(vbox)\n\
-      \        container.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)\n\
-      \n        # Add to chat layout\n        self.chat_layout.addWidget(container,\
-      \ alignment=QtCore.Qt.AlignRight)\n\n        # Force proper size recalculation\n\
-      \        bubble.adjustSize()\n        scroll.adjustSize()\n        container.adjustSize()\n\
-      \        self.chat_container.adjustSize()\n        QtWidgets.QApplication.processEvents()\
-      \  # Force layout update\n\n        # Scroll to bottom\n        QtCore.QTimer.singleShot(50,\
-      \ lambda: self.scroll_area.verticalScrollBar().setValue(\n            self.scroll_area.verticalScrollBar().maximum()\n\
-      \        ))\n\n        self.input_box.clear()\n        self._last_message_timestamp\
-      \ = timestamp\n\n    def _process_feedback(self, msg):\n        try:\n     \
-      \       if pmt.is_symbol(msg):\n                feedback = pmt.symbol_to_string(msg)\n\
-      \n                if feedback == \"END_ACK_RECEIVED\" and self._last_message_timestamp:\n\
-      \                    # Successful delivery: show current time in blue pill\n\
-      \                    self._last_message_timestamp.setText(datetime.now().strftime(\"\
-      %H:%M\"))\n                    self._last_message_timestamp.setStyleSheet(\"\
-      \"\"\n                        QLabel {\n                            background-color:\
-      \ #2196F3;  /* blue background */\n                            color: white;\n\
-      \                            font-size: 18px;\n                            border-radius:\
-      \ 8px;\n                            padding: 2px 6px;\n                    \
-      \    }\n                    \"\"\")\n\n                elif feedback == \"RETRY_LIMIT_EXCEEDED\"\
-      \ and self._last_message_timestamp:\n                    # Failed delivery:\
-      \ red pill\n                    self._last_message_timestamp.setText(\"Failed\"\
-      )\n                    self._last_message_timestamp.setStyleSheet(\"\"\"\n \
-      \                       QLabel {\n                            background-color:\
-      \ #F44336;  /* red background */\n                            color: white;\n\
-      \                            font-size: 18px;\n                            border-radius:\
-      \ 8px;\n                            padding: 2px 6px;\n                    \
-      \    }\n                    \"\"\")\n\n        except Exception as e:\n    \
-      \        print(f\"[messenger_gui] Error processing feedback: {e}\")\n"
+      \   def paintEvent(self, event):\n        if self.bg_pixmap and not self.bg_pixmap.isNull():\n\
+      \            painter = QtGui.QPainter(self.viewport())\n            scaled_pixmap\
+      \ = self.bg_pixmap.scaled(\n                self.viewport().size(),\n      \
+      \          QtCore.Qt.KeepAspectRatioByExpanding,\n                QtCore.Qt.SmoothTransformation\n\
+      \            )\n            x = (self.viewport().width() - scaled_pixmap.width())\
+      \ // 2\n            y = (self.viewport().height() - scaled_pixmap.height())\
+      \ // 2\n            painter.drawPixmap(x, y, scaled_pixmap)\n        super().paintEvent(event)\n\
+      \n# ==========================================\n# 2. THE MAIN WINDOW (GUI LOGIC)\n\
+      # ==========================================\nclass MessengerWindow(QtWidgets.QWidget):\n\
+      \    send_to_gr_signal = QtCore.pyqtSignal(str)\n    addr_selected_signal =\
+      \ QtCore.pyqtSignal(str)\n\n    def __init__(self, bg_image=\"\"):\n       \
+      \ super().__init__()\n        self.setWindowTitle(\"Messenger GUI - Multi User\"\
+      )\n        self.resize(900, 650)\n        self.bg_image_path = bg_image\n  \
+      \      \n        # --- STATE FLAGS ---\n        self.is_waiting_for_ack = False\
+      \ \n        \n        # --- DATA STRUCTURES ---\n        self.added_addresses\
+      \ = set()\n        self.selected_btn = None \n        self.current_dest_address\
+      \ = None\n        self.user_layouts = {}\n        self.contact_buttons = []\n\
+      \n        # --- STYLES ---\n        self.style_btn_normal = \"\"\"\n       \
+      \     QPushButton {\n                background-color: #34495e; color: #ecf0f1;\
+      \ border: 1px solid #2c3e50;\n                padding: 12px; border-radius:\
+      \ 6px; text-align: left;\n            }\n            QPushButton:hover { background-color:\
+      \ #4b6584; }\n            QPushButton:disabled { background-color: #2c3e50;\
+      \ color: #7f8c8d; border: 1px solid #2c3e50; }\n        \"\"\"\n        self.style_btn_selected\
+      \ = \"\"\"\n            QPushButton {\n                background-color: #27ae60;\
+      \ color: white; border: 2px solid white;\n                padding: 12px; border-radius:\
+      \ 6px; text-align: left; font-weight: bold;\n            }\n            QPushButton:disabled\
+      \ { background-color: #2ecc71; opacity: 0.7; }\n        \"\"\"\n\n        #\
+      \ --- MAIN LAYOUT ---\n        self.main_layout = QtWidgets.QHBoxLayout()\n\
+      \        self.main_layout.setContentsMargins(0, 0, 0, 0)\n        self.main_layout.setSpacing(0)\n\
+      \        self.setLayout(self.main_layout)\n\n        self._init_sidebar()\n\
+      \        self._init_right_panel()\n\n    def _init_sidebar(self):\n        self.sidebar\
+      \ = QtWidgets.QWidget()\n        self.sidebar.setFixedWidth(230)\n        self.sidebar.setStyleSheet(\"\
+      background-color: #2c3e50; border-right: 1px solid #1a252f;\")\n        layout\
+      \ = QtWidgets.QVBoxLayout(self.sidebar)\n        layout.setSpacing(10)\n\n \
+      \       header = QtWidgets.QLabel(\"CONTACTS\")\n        header.setStyleSheet(\"\
+      color: #95a5a6; font-weight: bold; margin-top: 10px;\")\n        layout.addWidget(header)\n\
+      \n        # Input\n        input_con = QtWidgets.QHBoxLayout()\n        self.addr_input\
+      \ = QtWidgets.QLineEdit()\n        self.addr_input.setPlaceholderText(\"ID (0-255)\"\
+      )\n        self.addr_input.setStyleSheet(\"\"\"\n            QLineEdit { background:\
+      \ #ecf0f1; border: none; border-radius: 4px; padding: 8px; }\n            QLineEdit:disabled\
+      \ { background: #95a5a6; color: #555; }\n        \"\"\")\n        self.addr_input.setValidator(QtGui.QIntValidator(0,\
+      \ 255))\n        self.addr_input.returnPressed.connect(self.add_address_button)\n\
+      \n        self.add_btn = QtWidgets.QPushButton(\"+\")\n        self.add_btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
+      \        self.add_btn.setFixedWidth(30)\n        self.add_btn.clicked.connect(self.add_address_button)\n\
+      \        self.add_btn.setStyleSheet(\"\"\"\n            QPushButton { background:\
+      \ #3498db; color: white; border: none; border-radius: 4px; font-weight: bold;\
+      \ }\n            QPushButton:disabled { background: #7f8c8d; }\n        \"\"\
+      \")\n        \n        input_con.addWidget(self.addr_input)\n        input_con.addWidget(self.add_btn)\n\
+      \        layout.addLayout(input_con)\n\n        layout.addWidget(self._create_separator())\n\
+      \n        # Contact List Scroll\n        self.contact_scroll = QtWidgets.QScrollArea()\n\
+      \        self.contact_scroll.setWidgetResizable(True)\n        self.contact_scroll.setStyleSheet(\"\
+      border: none; background: transparent;\")\n        \n        self.contact_container\
+      \ = QtWidgets.QWidget()\n        self.contact_layout = QtWidgets.QVBoxLayout(self.contact_container)\n\
+      \        self.contact_layout.setAlignment(QtCore.Qt.AlignTop)\n        self.contact_layout.setSpacing(5)\n\
+      \        self.contact_scroll.setWidget(self.contact_container)\n\n        layout.addWidget(self.contact_scroll)\n\
+      \        self.main_layout.addWidget(self.sidebar)\n\n    def _init_right_panel(self):\n\
+      \        right_panel = QtWidgets.QWidget()\n        layout = QtWidgets.QVBoxLayout(right_panel)\n\
+      \        layout.setContentsMargins(0, 0, 0, 0)\n        layout.setSpacing(0)\n\
+      \n        # Stack for Chat Pages\n        self.chat_stack = QtWidgets.QStackedWidget()\n\
+      \        welcome_page = QtWidgets.QLabel(\"Select or Add a contact to start\
+      \ messaging\")\n        welcome_page.setAlignment(QtCore.Qt.AlignCenter)\n \
+      \       welcome_page.setStyleSheet(\"background-color: #e5ddd5; color: #888;\
+      \ font-size: 18px;\")\n        self.chat_stack.addWidget(welcome_page)\n   \
+      \     layout.addWidget(self.chat_stack, stretch=1)\n\n        # Input Area (Stored\
+      \ in self.input_box_wrapper so we can hide/show it)\n        self.input_box_wrapper\
+      \ = QtWidgets.QWidget()\n        self.input_box_wrapper.setStyleSheet(\"background-color:\
+      \ #f0f0f0; border-top: 1px solid #dcdcdc;\")\n        input_box_layout = QtWidgets.QHBoxLayout(self.input_box_wrapper)\n\
+      \        input_box_layout.setContentsMargins(10, 10, 10, 10)\n        \n   \
+      \     self.msg_input = QtWidgets.QLineEdit()\n        self.msg_input.setPlaceholderText(\"\
+      Type a message...\")\n        self.msg_input.setStyleSheet(\"\"\"\n        \
+      \    QLineEdit { border-radius: 20px; padding: 10px 15px; background: white;\
+      \ border: 1px solid #ccc; font-size: 14px; }\n            QLineEdit:disabled\
+      \ { background-color: #e0e0e0; color: #888; }\n        \"\"\")\n        \n \
+      \       self.send_btn = QtWidgets.QPushButton(\"Send\")\n        self.send_btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
+      \        self.send_btn.setStyleSheet(\"\"\"\n            QPushButton { background-color:\
+      \ #008069; color: white; border-radius: 20px; padding: 10px 20px; font-weight:\
+      \ bold; }\n            QPushButton:disabled { background-color: #95a5a6; }\n\
+      \        \"\"\")\n        \n        self.msg_input.returnPressed.connect(self.on_send_click)\n\
+      \        self.send_btn.clicked.connect(self.on_send_click)\n\n        input_box_layout.addWidget(self.msg_input)\n\
+      \        input_box_layout.addWidget(self.send_btn)\n\n        layout.addWidget(self.input_box_wrapper)\n\
+      \        self.main_layout.addWidget(right_panel)\n        \n        # HIDE INITIALLY\n\
+      \        self.input_box_wrapper.hide()\n\n    def _create_separator(self):\n\
+      \        line = QtWidgets.QFrame()\n        line.setFrameShape(QtWidgets.QFrame.HLine)\n\
+      \        line.setStyleSheet(\"color: #3e5871;\")\n        return line\n\n  \
+      \  def add_address_button(self):\n        text = self.addr_input.text().strip()\n\
+      \        if not text: return\n        val = int(text)\n        \n        if\
+      \ val in self.added_addresses: \n            self.addr_input.clear()\n     \
+      \       return\n            \n        self.added_addresses.add(val)\n      \
+      \  \n        btn = QtWidgets.QPushButton(f\"Address: {val}\")\n        btn.setCursor(QtCore.Qt.PointingHandCursor)\n\
+      \        btn.setStyleSheet(self.style_btn_normal)\n        btn.clicked.connect(lambda\
+      \ checked, b=btn, a=val: self.handle_address_click(b, a))\n        \n      \
+      \  self.contact_layout.addWidget(btn)\n        self.contact_buttons.append(btn)\n\
+      \        \n        new_chat_page = self._create_chat_page_widget()\n       \
+      \ self.chat_stack.addWidget(new_chat_page)\n        \n        chat_layout =\
+      \ new_chat_page.widget().layout()\n        \n        self.user_layouts[val]\
+      \ = {\n            \"page\": new_chat_page,\n            \"layout\": chat_layout,\n\
+      \            \"scroll_area\": new_chat_page\n        }\n\n        self.addr_input.clear()\n\
+      \        self.handle_address_click(btn, val)\n\n    def _create_chat_page_widget(self):\n\
+      \        scroll = WallpaperScrollArea(bg_image=self.bg_image_path)\n       \
+      \ scroll.setStyleSheet(\"border: none; background-color: #e5ddd5;\") \n    \
+      \    container = QtWidgets.QWidget()\n        layout = QtWidgets.QVBoxLayout(container)\n\
+      \        layout.setAlignment(QtCore.Qt.AlignTop)\n        scroll.setWidget(container)\n\
+      \        container.setStyleSheet(\"background: transparent;\")\n        return\
+      \ scroll\n\n    def handle_address_click(self, btn_obj, address_val):\n    \
+      \    if self.is_waiting_for_ack:\n            return\n\n        # Show input\
+      \ bar when an address is selected\n        if self.input_box_wrapper.isHidden():\n\
+      \            self.input_box_wrapper.show()\n\n        if self.selected_btn and\
+      \ self.selected_btn != btn_obj:\n            self.selected_btn.setStyleSheet(self.style_btn_normal)\n\
+      \        btn_obj.setStyleSheet(self.style_btn_selected)\n        self.selected_btn\
+      \ = btn_obj\n        \n        self.current_dest_address = address_val\n   \
+      \     \n        if address_val in self.user_layouts:\n            target_page\
+      \ = self.user_layouts[address_val][\"page\"]\n            self.chat_stack.setCurrentWidget(target_page)\n\
+      \n        self.addr_selected_signal.emit(str(address_val))\n\n    def on_send_click(self):\n\
+      \        if self.is_waiting_for_ack:\n            return\n\n        text = self.msg_input.text().strip()\n\
+      \        if not text: return\n        \n        if self.current_dest_address\
+      \ is None:\n            return\n\n        self._set_ui_busy_state(True)\n\n\
+      \        user_data = self.user_layouts[self.current_dest_address]\n        self._create_bubble(text,\
+      \ user_data[\"layout\"], user_data[\"scroll_area\"])\n        \n        self.send_to_gr_signal.emit(text)\n\
+      \        self.msg_input.clear()\n\n    def _set_ui_busy_state(self, is_busy):\n\
+      \        \"\"\"Disables/Enables INPUT, SEND BTN, SIDEBAR, and ADD BTN\"\"\"\n\
+      \        self.is_waiting_for_ack = is_busy\n        \n        self.msg_input.setEnabled(not\
+      \ is_busy)\n        self.send_btn.setEnabled(not is_busy)\n        self.addr_input.setEnabled(not\
+      \ is_busy)\n        self.add_btn.setEnabled(not is_busy)\n\n        for btn\
+      \ in self.contact_buttons:\n            btn.setEnabled(not is_busy)\n      \
+      \  \n        if is_busy:\n            self.send_btn.setText(\"Wait...\")\n \
+      \       else:\n            self.send_btn.setText(\"Send\")\n            self.msg_input.setFocus()\n\
+      \n    def _create_bubble(self, text, layout, scroll_area):\n        container\
+      \ = QtWidgets.QWidget()\n        vbox = QtWidgets.QVBoxLayout(container)\n \
+      \       vbox.setContentsMargins(0,0,0,0)\n\n        h_scroll = QtWidgets.QScrollArea()\n\
+      \        h_scroll.setWidgetResizable(True)\n        h_scroll.setFixedHeight(60)\n\
+      \        h_scroll.setStyleSheet(\"background: transparent; border: none;\")\n\
+      \        h_scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)\n\
+      \        h_scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)\n\
+      \n        lbl = QtWidgets.QLabel(text)\n        lbl.setStyleSheet(\"background-color:\
+      \ #dcf8c6; padding: 8px; border-radius: 10px; font-size: 16px;\")\n        h_scroll.setWidget(lbl)\n\
+      \        h_scroll.setMinimumWidth(100)\n        h_scroll.setMaximumWidth(450)\n\
+      \        lbl.adjustSize()\n        h_scroll.setFixedHeight(lbl.height() + 25)\n\
+      \n        ts = QtWidgets.QLabel(\"Sending...\")\n        ts.setStyleSheet(\"\
+      color: grey; font-size: 10px;\")\n        ts.setAlignment(QtCore.Qt.AlignRight)\n\
+      \        \n        vbox.addWidget(h_scroll)\n        vbox.addWidget(ts)\n\n\
+      \        row = QtWidgets.QHBoxLayout()\n        row.addStretch()\n        row.addWidget(container)\n\
+      \        \n        layout.addLayout(row)\n        \n        self._last_message_timestamp\
+      \ = ts\n        QtCore.QTimer.singleShot(50, lambda: scroll_area.verticalScrollBar().setValue(scroll_area.verticalScrollBar().maximum()))\n\
+      \n    @QtCore.pyqtSlot(str)\n    def handle_feedback(self, feedback):\n    \
+      \    if self._last_message_timestamp:\n            if feedback == \"END_ACK_RECEIVED\"\
+      :\n                self._last_message_timestamp.setText(datetime.now().strftime(\"\
+      %H:%M\") + \" \u2713\u2713\")\n                self._last_message_timestamp.setStyleSheet(\"\
+      color: #34B7F1; font-weight: bold;\")\n            elif feedback == \"RETRY_LIMIT_EXCEEDED\"\
+      :\n                self._last_message_timestamp.setText(\"Failed \u274C\")\n\
+      \                self._last_message_timestamp.setStyleSheet(\"color: red;\"\
+      )\n        \n        self._set_ui_busy_state(False)\n\n# ==========================================\n\
+      # 3. GNU RADIO BLOCK\n# ==========================================\nclass GuiSignaler(QtCore.QObject):\n\
+      \    feedback_signal = QtCore.pyqtSignal(str)\n\nclass messenger_gui(gr.basic_block):\n\
+      \    def __init__(self, bg_image=\"\"):\n        gr.basic_block.__init__(\n\
+      \            self,\n            name=\"Messenger GUI\",\n            in_sig=None,\n\
+      \            out_sig=None,\n        )\n\n        self.message_port_register_out(pmt.intern(\"\
+      out\"))\n        self.message_port_register_out(pmt.intern(\"dest_addr\"))\n\
+      \        self.message_port_register_in(pmt.intern(\"feedback\"))\n        self.set_msg_handler(pmt.intern(\"\
+      feedback\"), self._process_feedback_msg)\n\n        self.qapp = QtWidgets.QApplication.instance()\n\
+      \        if not self.qapp:\n            self.qapp = QtWidgets.QApplication(sys.argv)\n\
+      \n        self.signaler = GuiSignaler()\n        self.gui_window = MessengerWindow(bg_image=bg_image)\n\
+      \        \n        self.signaler.feedback_signal.connect(self.gui_window.handle_feedback)\n\
+      \        self.gui_window.send_to_gr_signal.connect(self._send_payload)\n   \
+      \     self.gui_window.addr_selected_signal.connect(self._send_dest_addr)\n\n\
+      \        self.gui_window.show()\n\n    def _process_feedback_msg(self, msg):\n\
+      \        try:\n            if pmt.is_symbol(msg):\n                s = pmt.symbol_to_string(msg)\n\
+      \                self.signaler.feedback_signal.emit(s)\n        except Exception:\n\
+      \            pass\n\n    def _send_payload(self, text_msg):\n        self.message_port_pub(pmt.intern(\"\
+      out\"), pmt.string_to_symbol(text_msg))\n\n    def _send_dest_addr(self, addr_str):\n\
+      \        self.message_port_pub(pmt.intern(\"dest_addr\"), pmt.string_to_symbol(addr_str))\n"
     affinity: ''
     alias: ''
     bg_image: '''/home/vboxuser/Downloads/tx.jpg'''
@@ -1197,16 +1291,14 @@ blocks:
     minoutbuf: '0'
   states:
     _io_cache: ('Messenger GUI', 'messenger_gui', [('bg_image', "''")], [('feedback',
-      'message', 1)], [('out', 'message', 1)], '\nWhatsApp-style Messenger GUI with
-      dynamic bubble resizing,\nhorizontal scroll for long messages, timestamp update
-      on delivery,\nand failure indication if retry limit is exceeded.\n', [])
+      'message', 1)], [('dest_addr', 'message', 1), ('out', 'message', 1)], '', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [128, 304.0]
+    coordinate: [224, 288.0]
     rotation: 180
     state: enabled
-- name: epy_block_2_0
+- name: epy_block_2_0_0
   id: epy_block
   parameters:
     _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport threading\n\
@@ -1217,14 +1309,17 @@ blocks:
       \    - On timeout, retransmits all unACKed packets in window\n    - After full\
       \ message, sends END packet [address, seq_id] (no payload)\n    - Sends feedback\
       \ to GUI when END ACK is received\n    - Sends feedback if retry limit is exceeded\n\
-      \    \"\"\"\n\n    def __init__(self, wait_time=2.0, pkt_size=32, address=0x01,\
+      \    - Next message starts from the first unacknowledged sequence number\n \
+      \   \"\"\"\n\n    def __init__(self, wait_time=2.0, pkt_size=32, address=0x01,\
       \ retry_limit=100, window_size=4):\n        gr.basic_block.__init__(\n     \
       \       self,\n            name=\"GUI Text to PDU with Go-Back-N ARQ\",\n  \
       \          in_sig=[],\n            out_sig=[]\n        )\n\n        # Parameters\n\
       \        self._timeout = float(wait_time)\n        self._pkt_size = int(pkt_size)\n\
       \        self._address = int(address) & 0xFF\n        self._retry_limit = int(retry_limit)\n\
-      \        self._window_size = int(window_size)\n\n        # Sequence ID\n   \
-      \     self._seq_id = 1  # 0x01..0xFF, avoid 0x00\n\n        # Message ports\n\
+      \        self._window_size = int(window_size)\n\n        # Sequence control\n\
+      \        self._seq_id = 1          # next sequence ID to start with\n      \
+      \  self._last_ack_seq = 0    # last acknowledged ID\n        self._has_acks\
+      \ = False    # tracks if any ACKs have been received\n\n        # Message ports\n\
       \        self.message_port_register_out(pmt.intern(\"out\"))\n        self.message_port_register_out(pmt.intern(\"\
       feedback\"))  # feedback port for GUI\n\n        self.message_port_register_in(pmt.intern(\"\
       in\"))\n        self.message_port_register_in(pmt.intern(\"ack_in\"))\n\n  \
@@ -1233,55 +1328,56 @@ blocks:
       \   # Thread + synchronization\n        self._thread = None\n        self._stop_event\
       \ = threading.Event()\n        self._lock = threading.Lock()\n\n        # Buffers\n\
       \        self._text_data = b\"\"\n        self._packets = []\n        self._base\
-      \ = 0          # first unACKed packet index\n        self._next_to_send = 0\
-      \  # next packet index to send\n        self._attempts = 0\n        self._end_seq_id\
-      \ = 0     # store END packet seq_id for feedback\n\n    # ---------------------------\n\
-      \    # Message handler from GUI\n    # ---------------------------\n    def\
-      \ _process_text(self, msg):\n        try:\n            if pmt.is_symbol(msg):\n\
-      \                text_str = pmt.symbol_to_string(msg)\n            elif pmt.is_string(msg):\n\
-      \                text_str = pmt.string_to_string(msg)\n            else:\n \
-      \               print(\"[pdu_text_gui] Invalid PMT message type\")\n       \
-      \         return\n\n            self._text_data = text_str.encode(\"utf-8\"\
-      )\n\n            # Start sending in a separate thread\n            if self._thread\
-      \ is None or not self._thread.is_alive():\n                self._stop_event.clear()\n\
+      \ = 0\n        self._next_to_send = 0\n        self._attempts = 0\n        self._end_seq_id\
+      \ = 0\n\n    # ---------------------------\n    # Message handler from GUI\n\
+      \    # ---------------------------\n    def _process_text(self, msg):\n    \
+      \    try:\n            if pmt.is_symbol(msg):\n                text_str = pmt.symbol_to_string(msg)\n\
+      \            elif pmt.is_string(msg):\n                text_str = pmt.string_to_string(msg)\n\
+      \            else:\n                print(\"[pdu_text_gui] Invalid PMT message\
+      \ type\")\n                return\n\n            self._text_data = text_str.encode(\"\
+      utf-8\")\n\n            # Start sending in a separate thread\n            if\
+      \ self._thread is None or not self._thread.is_alive():\n                self._stop_event.clear()\n\
       \                self._thread = threading.Thread(target=self._run)\n       \
       \         self._thread.daemon = True\n                self._thread.start()\n\
       \n        except Exception as e:\n            print(f\"[pdu_text_gui] Error\
       \ processing text: {e}\")\n\n    # ---------------------------\n    # Sending\
       \ loop (Go-Back-N)\n    # ---------------------------\n    def _run(self):\n\
       \        raw = self._text_data\n        step = self._pkt_size - 2\n        blocks\
-      \ = [raw[i:i+step] for i in range(0, len(raw), step)]\n\n        # Build packets\
-      \ with headers\n        self._packets = []\n        for block in blocks:\n \
-      \           packet = bytes([self._address, self._seq_id]) + block\n        \
-      \    self._packets.append((self._seq_id, packet))\n            self._seq_id\
-      \ = (self._seq_id + 1) & 0xFF\n            if self._seq_id == 0:\n         \
-      \       self._seq_id = 1\n\n        # Add END packet (address + seq_id, no payload)\n\
-      \        end_packet = bytes([self._address, self._seq_id])\n        self._packets.append((self._seq_id,\
-      \ end_packet))\n        self._end_seq_id = self._seq_id  # store END packet\
-      \ seq_id for feedback\n        print(f\"[pdu_text_gui] End packet prepared (id=0x{self._seq_id:02X})\"\
-      )\n        self._seq_id = (self._seq_id + 1) & 0xFF\n        if self._seq_id\
-      \ == 0:\n            self._seq_id = 1\n\n        self._base = 0\n        self._next_to_send\
-      \ = 0\n        self._attempts = 0\n\n        while self._base < len(self._packets)\
-      \ and not self._stop_event.is_set():\n            with self._lock:\n       \
-      \         # Send up to window_size packets\n                while self._next_to_send\
-      \ < self._base + self._window_size and self._next_to_send < len(self._packets):\n\
-      \                    seq_id, packet = self._packets[self._next_to_send]\n  \
-      \                  vec = pmt.init_u8vector(len(packet), list(packet))\n    \
-      \                pdu = pmt.cons(pmt.PMT_NIL, vec)\n                    self.message_port_pub(pmt.intern(\"\
-      out\"), pdu)\n                    if len(packet) > 2:\n                    \
-      \    print(f\"[pdu_text_gui] Packet id=0x{seq_id:02X} sent\")\n            \
-      \        else:\n                        print(f\"[pdu_text_gui] END packet id=0x{seq_id:02X}\
-      \ sent\")\n                    self._next_to_send += 1\n\n            # Wait\
-      \ for ACK\n            time.sleep(self._timeout)\n\n            with self._lock:\n\
-      \                if self._base < self._next_to_send:  # still unACKed packets\n\
-      \                    self._attempts += 1\n                    if self._attempts\
-      \ >= self._retry_limit:\n                        print(\"[pdu_text_gui] Failed:\
-      \ retry limit exceeded\")\n                        # Send feedback to GUI about\
-      \ retry limit exceeded\n                        self.message_port_pub(pmt.intern(\"\
-      feedback\"), pmt.intern(\"RETRY_LIMIT_EXCEEDED\"))\n                       \
-      \ self._stop_event.set()\n                        break\n                  \
-      \  print(\"[pdu_text_gui] Timeout: retransmitting window\")\n              \
-      \      # retransmit all unACKed packets\n                    for i in range(self._base,\
+      \ = [raw[i:i+step] for i in range(0, len(raw), step)]\n\n        # Determine\
+      \ starting seq_id\n        if self._has_acks:\n            # continue from the\
+      \ next unACKed sequence\n            self._seq_id = (self._last_ack_seq + 1)\
+      \ & 0xFF\n            if self._seq_id == 0:\n                self._seq_id =\
+      \ 1\n        else:\n            self._seq_id = 1\n\n        print(f\"[pdu_text_gui]\
+      \ Starting new message at seq=0x{self._seq_id:02X}\")\n\n        # Build packets\n\
+      \        self._packets = []\n        for block in blocks:\n            packet\
+      \ = bytes([self._address, self._seq_id]) + block\n            self._packets.append((self._seq_id,\
+      \ packet))\n            self._seq_id = (self._seq_id + 1) & 0xFF\n         \
+      \   if self._seq_id == 0:\n                self._seq_id = 1\n\n        # Add\
+      \ END packet\n        end_packet = bytes([self._address, self._seq_id])\n  \
+      \      self._packets.append((self._seq_id, end_packet))\n        self._end_seq_id\
+      \ = self._seq_id\n        print(f\"[pdu_text_gui] End packet prepared (id=0x{self._seq_id:02X})\"\
+      )\n\n        self._seq_id = (self._seq_id + 1) & 0xFF\n        if self._seq_id\
+      \ == 0:\n            self._seq_id = 1\n\n        # Reset window variables\n\
+      \        self._base = 0\n        self._next_to_send = 0\n        self._attempts\
+      \ = 0\n\n        while self._base < len(self._packets) and not self._stop_event.is_set():\n\
+      \            with self._lock:\n                # Send up to window_size packets\n\
+      \                while self._next_to_send < self._base + self._window_size and\
+      \ self._next_to_send < len(self._packets):\n                    seq_id, packet\
+      \ = self._packets[self._next_to_send]\n                    vec = pmt.init_u8vector(len(packet),\
+      \ list(packet))\n                    pdu = pmt.cons(pmt.PMT_NIL, vec)\n    \
+      \                self.message_port_pub(pmt.intern(\"out\"), pdu)\n         \
+      \           if len(packet) > 2:\n                        print(f\"[pdu_text_gui]\
+      \ Packet id=0x{seq_id:02X} sent\")\n                    else:\n            \
+      \            print(f\"[pdu_text_gui] END packet id=0x{seq_id:02X} sent\")\n\
+      \                    self._next_to_send += 1\n\n            # Wait for ACK\n\
+      \            time.sleep(self._timeout)\n\n            with self._lock:\n   \
+      \             if self._base < self._next_to_send:\n                    self._attempts\
+      \ += 1\n                    if self._attempts >= self._retry_limit:\n      \
+      \                  print(\"[pdu_text_gui] Failed: retry limit exceeded\")\n\
+      \                        self.message_port_pub(pmt.intern(\"feedback\"), pmt.intern(\"\
+      RETRY_LIMIT_EXCEEDED\"))\n                        self._stop_event.set()\n \
+      \                       break\n\n                    print(\"[pdu_text_gui]\
+      \ Timeout: retransmitting window\")\n                    for i in range(self._base,\
       \ self._next_to_send):\n                        seq_id, packet = self._packets[i]\n\
       \                        vec = pmt.init_u8vector(len(packet), list(packet))\n\
       \                        pdu = pmt.cons(pmt.PMT_NIL, vec)\n                \
@@ -1297,15 +1393,16 @@ blocks:
       \            with self._lock:\n                # slide window if ACK is valid\n\
       \                for i in range(self._base, self._next_to_send):\n         \
       \           seq_id, _ = self._packets[i]\n                    if seq_id == ack_id:\n\
-      \                        if len(self._packets[i][1]) > 2:\n                \
-      \            print(f\"[pdu_text_gui] ACK received for id=0x{ack_id:02X}\")\n\
-      \                        else:\n                            print(f\"[pdu_text_gui]\
-      \ ACK received for END id=0x{ack_id:02X}\")\n                            # Send\
-      \ feedback to GUI for final ACK\n                            self.message_port_pub(pmt.intern(\"\
-      feedback\"), pmt.intern(\"END_ACK_RECEIVED\"))\n                        self._base\
-      \ = i + 1\n                        self._attempts = 0  # reset retries\n   \
-      \                     break\n\n        except Exception as e:\n            print(f\"\
-      [pdu_text_gui] Error processing ACK: {e}\")\n\n"
+      \                        self._has_acks = True\n                        self._last_ack_seq\
+      \ = ack_id  # save last ACKed seq\n                        if len(self._packets[i][1])\
+      \ > 2:\n                            print(f\"[pdu_text_gui] ACK received for\
+      \ id=0x{ack_id:02X}\")\n                        else:\n                    \
+      \        print(f\"[pdu_text_gui] ACK received for END id=0x{ack_id:02X}\")\n\
+      \                            self.message_port_pub(pmt.intern(\"feedback\"),\
+      \ pmt.intern(\"END_ACK_RECEIVED\"))\n                        self._base = i\
+      \ + 1\n                        self._attempts = 0\n                        break\n\
+      \n        except Exception as e:\n            print(f\"[pdu_text_gui] Error\
+      \ processing ACK: {e}\")\n\n"
     address: '21'
     affinity: ''
     alias: ''
@@ -1313,8 +1410,8 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     pkt_size: '32'
-    retry_limit: '16'
-    wait_time: '0.2'
+    retry_limit: '100'
+    wait_time: '0.1'
     window_size: '7'
   states:
     _io_cache: '(''GUI Text to PDU with Go-Back-N ARQ'', ''pdu_text_gui'', [(''wait_time'',
@@ -1326,11 +1423,12 @@ blocks:
       window\n- Waits for ACKs [0xAA, seq_id]\n- On timeout, retransmits all unACKed
       packets in window\n- After full message, sends END packet [address, seq_id]
       (no payload)\n- Sends feedback to GUI when END ACK is received\n- Sends feedback
-      if retry limit is exceeded\n'', [])'
+      if retry limit is exceeded\n- Next message starts from the first unacknowledged
+      sequence number\n'', [])'
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [136, 128.0]
+    coordinate: [160, 104.0]
     rotation: 0
     state: enabled
 - name: epy_block_3
@@ -1527,70 +1625,68 @@ blocks:
   id: epy_block
   parameters:
     _source_code: "#!/usr/bin/env python3\n# -*- coding: utf-8 -*-\n\nimport pmt\n\
-      import zlib\nfrom gnuradio import gr\n\nclass crc_forwarder(gr.basic_block):\n\
+      import zlib\nimport time\nfrom gnuradio import gr\n\nclass crc_forwarder(gr.basic_block):\n\
       \    \"\"\"\n    CRC32 Checker + Dedup + Forwarder (Message Reassembler)\n \
       \   - Input : [sender_addr | seq_id | payload | crc32]\n    - Output: [sender_addr\
-      \ | full_message] only when end marker received\n    - End marker: valid packet\
-      \ with empty payload\n    - Handles multiple senders dynamically\n    - ACK\
-      \ prepends transmitter's address and appends CRC32\n    \"\"\"\n\n    def __init__(self):\n\
-      \        gr.basic_block.__init__(\n            self,\n            name=\"CRC32\
-      \ Dedup + Forwarder\",\n            in_sig=[],\n            out_sig=[]\n   \
-      \     )\n\n        self.received_ids = set()  # track processed (addr, seq_id)\n\
-      \        self.buffers = {}          # per-sender message buffer\n\n        #\
-      \ Ports\n        self.message_port_register_in(pmt.intern(\"in\"))\n       \
-      \ self.message_port_register_out(pmt.intern(\"out\"))      # forward reassembled\
-      \ message\n        self.message_port_register_out(pmt.intern(\"ack_out\")) \
-      \ # ACKs\n\n        self.set_msg_handler(pmt.intern(\"in\"), self._handle_msg)\n\
-      \n        print(\"[CRC32] Receiver initialized\")\n\n    def _handle_msg(self,\
+      \ | full_message] (only when END marker)\n    - END marker = valid packet with\
+      \ empty payload\n    - Adds parameter 'retry_limit' to retransmit ACKs multiple\
+      \ times\n    \"\"\"\n\n    def __init__(self, retry_limit=1):\n        gr.basic_block.__init__(\n\
+      \            self,\n            name=\"CRC32 Dedup + Forwarder\",\n        \
+      \    in_sig=[],\n            out_sig=[]\n        )\n\n        self.retry_limit\
+      \ = max(1, int(retry_limit))  # ensure >= 1\n\n        self.received_ids = set()\n\
+      \        self.buffers = {}\n\n        # Ports\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        self.message_port_register_out(pmt.intern(\"out\"))\n      \
+      \  self.message_port_register_out(pmt.intern(\"ack_out\"))\n\n        self.set_msg_handler(pmt.intern(\"\
+      in\"), self._handle_msg)\n\n        print(f\"[CRC32] Receiver initialized (retry_limit={self.retry_limit})\"\
+      )\n\n    def _send_ack(self, ack_data):\n        \"\"\"Send ACK multiple times\
+      \ based on retry_limit.\"\"\"\n        ack_vec = pmt.init_u8vector(len(ack_data),\
+      \ list(ack_data))\n        ack_pdu = pmt.cons(pmt.PMT_NIL, ack_vec)\n\n    \
+      \    for i in range(self.retry_limit):\n            self.message_port_pub(pmt.intern(\"\
+      ack_out\"), ack_pdu)\n            print(f\"[ACK] Retransmit {i+1}/{self.retry_limit}\"\
+      )\n            time.sleep(0.01)  # short delay (optional)\n\n    def _handle_msg(self,\
       \ msg):\n        if not pmt.is_pair(msg):\n            return\n        vec =\
       \ pmt.cdr(msg)\n        if not pmt.is_u8vector(vec):\n            return\n\n\
       \        data = bytearray(pmt.u8vector_elements(vec))\n        if len(data)\
-      \ < 6:  # minimum frame length [addr | seq | (opt payload) | crc32]\n      \
-      \      print(\"[CRC32] Frame too short\")\n            return\n\n        sender_addr\
-      \ = data[0]  # transmitter address\n        pkt_id = data[1]\n        payload\
-      \ = data[2:-4]\n        recv_crc = int.from_bytes(data[-4:], \"big\")\n    \
+      \ < 6:\n            print(\"[CRC32] Frame too short\")\n            return\n\
+      \n        sender_addr = data[0]\n        pkt_id = data[1]\n        payload =\
+      \ data[2:-4]\n        recv_crc = int.from_bytes(data[-4:], \"big\")\n\n    \
       \    calc_crc = zlib.crc32(bytes([sender_addr, pkt_id]) + payload) & 0xFFFFFFFF\n\
-      \n        if calc_crc != recv_crc:\n            print(f\"[CRC32] FAIL (Addr\
-      \ 0x{sender_addr:02X}, ID {pkt_id})\")\n            return\n\n        # \u2705\
-      \ CRC OK\n        print(f\"[CRC32] OK (Addr 0x{sender_addr:02X}, ID {pkt_id})\"\
-      )\n\n        # --- Construct ACK like address_add block, then append CRC32 ---\n\
-      \        ack_data = bytearray([sender_addr, 0xAA, pkt_id])\n        ack_crc\
-      \ = zlib.crc32(ack_data) & 0xFFFFFFFF\n        ack_data += ack_crc.to_bytes(4,\
-      \ 'big')\n\n        ack_vec = pmt.init_u8vector(len(ack_data), list(ack_data))\n\
-      \        ack_pdu = pmt.cons(pmt.PMT_NIL, ack_vec)\n        self.message_port_pub(pmt.intern(\"\
-      ack_out\"), ack_pdu)\n        print(f\"[ACK] Sent to transmitter Addr 0x{sender_addr:02X},\
-      \ ID {pkt_id}, CRC32 0x{ack_crc:08X}\")\n\n        # Deduplication\n       \
-      \ if (sender_addr, pkt_id) in self.received_ids:\n            print(f\"[Forward]\
-      \ Addr 0x{sender_addr:02X}, ID {pkt_id} duplicate, ignored\")\n            return\n\
-      \        self.received_ids.add((sender_addr, pkt_id))\n\n        # Empty payload\
-      \ = END marker\n        if len(payload) == 0:\n            if sender_addr in\
-      \ self.buffers and self.buffers[sender_addr]:\n                full_payload\
+      \n        if calc_crc != recv_crc:\n            print(f\"[CRC32] FAIL (Addr=0x{sender_addr:02X},\
+      \ ID={pkt_id})\")\n            return\n\n        print(f\"[CRC32] OK (Addr=0x{sender_addr:02X},\
+      \ ID={pkt_id})\")\n\n        # --- Build ACK ---\n        ack_data = bytearray([sender_addr,\
+      \ 0xAA, pkt_id])\n        ack_crc = zlib.crc32(ack_data) & 0xFFFFFFFF\n    \
+      \    ack_data += ack_crc.to_bytes(4, 'big')\n\n        print(f\"[ACK] Sending\
+      \ ACK with retry limit {self.retry_limit}\")\n        self._send_ack(ack_data)\n\
+      \n        # Dedup\n        if (sender_addr, pkt_id) in self.received_ids:\n\
+      \            print(f\"[Forward] Duplicate packet ID={pkt_id}, ignored\")\n \
+      \           return\n        self.received_ids.add((sender_addr, pkt_id))\n\n\
+      \        # END MARKER\n        if len(payload) == 0:\n            if sender_addr\
+      \ in self.buffers and self.buffers[sender_addr]:\n                full_payload\
       \ = b''.join(self.buffers[sender_addr])\n                forward_bytes = bytes([sender_addr])\
-      \ + full_payload\n                out_vec = pmt.init_u8vector(len(forward_bytes),\
+      \ + full_payload\n\n                out_vec = pmt.init_u8vector(len(forward_bytes),\
       \ list(forward_bytes))\n                out_msg = pmt.cons(pmt.PMT_NIL, out_vec)\n\
-      \                self.message_port_pub(pmt.intern(\"out\"), out_msg)\n     \
-      \           print(f\"[Forward] Addr 0x{sender_addr:02X}, END marker \u2192 {len(full_payload)}\
-      \ bytes reassembled and forwarded\")\n            else:\n                print(f\"\
-      [Forward] Addr 0x{sender_addr:02X}, END marker but no buffered data\")\n   \
-      \         self.buffers[sender_addr] = []\n        else:\n            if sender_addr\
-      \ not in self.buffers:\n                self.buffers[sender_addr] = []\n   \
-      \         self.buffers[sender_addr].append(payload)\n            total_len =\
-      \ sum(len(p) for p in self.buffers[sender_addr])\n            print(f\"[Buffer]\
-      \ Addr 0x{sender_addr:02X}, ID {pkt_id} \u2192 {len(payload)} bytes buffered\
-      \ (total {total_len})\")\n\n"
+      \                self.message_port_pub(pmt.intern(\"out\"), out_msg)\n\n   \
+      \             print(f\"[Forward] Reassembled {len(full_payload)} bytes\")\n\n\
+      \            else:\n                print(f\"[Forward] END marker received but\
+      \ no data\")\n\n            self.buffers[sender_addr] = []\n            return\n\
+      \n        # Buffering\n        if sender_addr not in self.buffers:\n       \
+      \     self.buffers[sender_addr] = []\n\n        self.buffers[sender_addr].append(payload)\n\
+      \        total_len = sum(len(p) for p in self.buffers[sender_addr])\n      \
+      \  print(f\"[Buffer] Addr 0x{sender_addr:02X}, ID {pkt_id}, +{len(payload)}\
+      \ bytes (total {total_len})\")\n\n"
     affinity: ''
     alias: ''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
+    retry_limit: '2'
   states:
-    _io_cache: '(''CRC32 Dedup + Forwarder'', ''crc_forwarder'', [], [(''in'', ''message'',
-      1)], [(''ack_out'', ''message'', 1), (''out'', ''message'', 1)], "\nCRC32 Checker
-      + Dedup + Forwarder (Message Reassembler)\n- Input : [sender_addr | seq_id |
-      payload | crc32]\n- Output: [sender_addr | full_message] only when end marker
-      received\n- End marker: valid packet with empty payload\n- Handles multiple
-      senders dynamically\n- ACK prepends transmitter''s address and appends CRC32\n",
-      [])'
+    _io_cache: '(''CRC32 Dedup + Forwarder'', ''crc_forwarder'', [(''retry_limit'',
+      ''1'')], [(''in'', ''message'', 1)], [(''ack_out'', ''message'', 1), (''out'',
+      ''message'', 1)], "\nCRC32 Checker + Dedup + Forwarder (Message Reassembler)\n-
+      Input : [sender_addr | seq_id | payload | crc32]\n- Output: [sender_addr | full_message]
+      (only when END marker)\n- END marker = valid packet with empty payload\n- Adds
+      parameter ''retry_limit'' to retransmit ACKs multiple times\n", [''retry_limit''])'
     bus_sink: false
     bus_source: false
     bus_structure: null
@@ -1631,9 +1727,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [672, 232.0]
+    coordinate: [688, 240.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_5_0
   id: epy_block
   parameters:
@@ -1707,7 +1803,7 @@ blocks:
     bus_structure: null
     coordinate: [296, 1144.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_6_0
   id: epy_block
   parameters:
@@ -1742,7 +1838,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 1040.0]
+    coordinate: [336, 1000.0]
     rotation: 0
     state: disabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -2680,6 +2776,7 @@ connections:
 - [digital_costas_loop_cc_0, '0', qtgui_const_sink_x_0, '0']
 - [digital_costas_loop_cc_0_0, '0', digital_constellation_decoder_cb_0_0, '0']
 - [digital_costas_loop_cc_0_0, '0', qtgui_const_sink_x_0_0, '0']
+- [digital_crc_append_0, out, epy_block_0, in]
 - [digital_crc_append_0, out, epy_block_5, in]
 - [digital_crc_append_0, out, epy_block_5_0, in]
 - [digital_diff_decoder_bb_0, '0', digital_map_bb_0, '0']
@@ -2696,16 +2793,16 @@ connections:
 - [digital_symbol_sync_xx_0, '0', digital_linear_equalizer_0_0, '0']
 - [digital_symbol_sync_xx_0_0, '0', digital_linear_equalizer_0_0_0, '0']
 - [epy_block_0, out, digital_protocol_formatter_async_0, in]
-- [epy_block_0_1_0, out, epy_block_2_0, in]
-- [epy_block_2_0, feedback, epy_block_0_1_0, feedback]
-- [epy_block_2_0, out, digital_crc_append_0, in]
+- [epy_block_0_1_0, dest_addr, epy_block_0, addr_in]
+- [epy_block_0_1_0, out, epy_block_2_0_0, in]
+- [epy_block_2_0_0, feedback, epy_block_0_1_0, feedback]
+- [epy_block_2_0_0, out, digital_crc_append_0, in]
+- [epy_block_3, out, epy_block_4_0, in]
 - [epy_block_3, out, epy_block_6, in]
 - [epy_block_3, out, epy_block_6_0, in]
-- [epy_block_3_0, out, epy_block_2_0, ack_in]
+- [epy_block_3_0, out, epy_block_2_0_0, ack_in]
 - [epy_block_4_0, ack_out, digital_protocol_formatter_async_0_0, in]
 - [epy_block_4_0, out, epy_block_3_1, in]
-- [epy_block_5, out, epy_block_0, in]
-- [epy_block_5_0, out, epy_block_0, in]
 - [epy_block_6, out, epy_block_4_0, in]
 - [epy_block_6_0, out, epy_block_4_0, in]
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '0']
