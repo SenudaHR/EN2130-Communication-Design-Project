@@ -128,3 +128,12 @@ The official `libbladeRF` library provides the necessary drivers and utilities.
 * **Multimedia Support:** Adding support for Video, image, PDF, and voice transmission.
 * **Collision Avoidance:** Implementing **CSMA/CA** (Carrier Sense Multiple Access with Collision Avoidance).
 * **Priority Handling:** Implementing priority-based message handling for emergency messages.
+## License & contact
+- License: (Add project license file, e.g., MIT or GPL — update LICENSE file as appropriate).
+- Contact / owner: SenudaHR (repository owner). Open issues or PRs in the repo for questions and contributions.
+
+## Acknowledgements
+- Nuand bladeRF and GNU Radio projects — this work builds on their hardware and software.
+- Any university/course collaborators and supervisors (add names here if desired).
+
+```
