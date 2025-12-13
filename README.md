@@ -104,6 +104,171 @@ The official `libbladeRF` library provides the necessary drivers and utilities.
     ```
 
 ---
+## Ettus Research USRP N210 Setup (Alternative)
+
+This guide explains how to set up the **Ettus Research USRP N210** using **UHD (USRP Hardware Driver)** and run the GNU Radio project.
+
+---
+
+### 1. Network Configuration
+
+The USRP N210 communicates over **Gigabit Ethernet**.
+
+* **USRP default IP:** `192.168.10.2`
+* **Host PC IP:** `192.168.10.1` (or any IP in `192.168.10.x`, except `.2`)
+
+#### Steps (Linux)
+
+1. Connect the USRP N210 directly to your PC using a **Gigabit Ethernet** cable.
+2. Set the Ethernet interface IP manually:
+
+```bash
+sudo ip addr add 192.168.10.1/24 dev eth0
+sudo ip link set eth0 up
+```
+
+> Replace `eth0` with your actual Ethernet interface name (check using `ip a`).
+
+3. Verify connectivity:
+
+```bash
+ping 192.168.10.2
+```
+
+A successful reply confirms correct network configuration.
+
+---
+
+### 2. Install UHD (USRP Hardware Driver)
+
+#### a. Install Dependencies
+
+```bash
+sudo apt update
+sudo apt install -y \
+  git \
+  cmake \
+  build-essential \
+  python3-dev \
+  libboost-all-dev \
+  libusb-1.0-0-dev
+```
+
+---
+
+#### b. Clone and Build UHD
+
+```bash
+git clone https://github.com/EttusResearch/uhd.git
+cd uhd
+
+git checkout release_4.6   # Use a stable UHD release
+
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+sudo make install
+sudo ldconfig
+```
+
+> ⚠️ Building UHD from source may take several minutes.
+
+---
+
+### 3. Download Firmware and FPGA Images
+
+After installing UHD, download the required firmware and FPGA images:
+
+```bash
+sudo uhd_images_downloader
+```
+
+This step is **mandatory** for proper USRP operation.
+
+---
+
+### 4. Verify Installation
+
+Check whether the USRP N210 is detected correctly:
+
+```bash
+uhd_find_devices
+```
+
+#### Expected Output (Example)
+
+* Device type: `usrp2 / n210`
+* IP address: `192.168.10.2`
+
+If the device is listed, UHD is correctly installed and the network setup is successful.
+
+---
+
+### 5. Running the Project
+
+#### a. Open the GNU Radio Flowgraph
+
+1. Launch **GNU Radio Companion (GRC)**.
+2. Open the main flowgraph:
+
+```bash
+cd <project-directory>
+gnuradio-companion cdp.grc
+```
+
+---
+
+### b. Configure Hardware Parameters
+
+Inside the flowgraph, set the appropriate parameters for your SDR:
+
+* **Center Frequency** (Tx/Rx)
+* **Gain** (RF / IF / BB as applicable)
+* **Sample Rate**
+* **Device Type**: `USRP N210` or `bladeRF`
+
+Ensure the correct device is selected before execution.
+
+---
+
+### c. Generate and Execute Python File
+
+From GNU Radio Companion:
+
+1. Click **Generate**
+2. Click **Execute**
+
+Or run directly from the terminal:
+
+```bash
+python3 cdp.py
+```
+
+---
+
+### Notes
+
+* Ensure no other application is using the Ethernet interface connected to the USRP.
+* Always verify **Gigabit Ethernet** link speed for stable operation.
+* Use appropriate RF front-end settings to avoid signal distortion or hardware damage.
+
+---
+
+### Troubleshooting
+
+* **Device not found:**
+
+  * Recheck IP configuration
+  * Disable NetworkManager control for the Ethernet interface
+* **Packet loss / underflows:**
+
+  * Reduce sample rate
+  * Confirm Gigabit Ethernet connection
+
+---
+
+✅ USRP N210 setup and project execution complete.
+
 
 ## 📊 Performance and Challenges
 
@@ -134,6 +299,6 @@ The official `libbladeRF` library provides the necessary drivers and utilities.
 
 ## Acknowledgements
 - Nuand bladeRF and GNU Radio projects — this work builds on their hardware and software.
-- Any university/course collaborators and supervisors (add names here if desired).
+
 
 ```
